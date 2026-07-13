@@ -20,6 +20,14 @@ export const course: Unit[] = [
     title: 'Basics',
     description: 'Say hello and introduce yourself',
     color: '#33ff66',
+    dialogue: [
+      { speaker: 'rosana', es: 'hola, buenos días', en: 'hello, good morning' },
+      { speaker: 'leo', es: 'hola, ¿cómo estás?', en: 'hi, how are you?' },
+      { speaker: 'rosana', es: 'estoy bien, gracias. me llamo Rosana', en: 'I am well, thanks. my name is Rosana' },
+      { speaker: 'leo', es: 'me llamo Leo, mucho gusto', en: 'my name is Leo, nice to meet you' },
+      { speaker: 'rosana', es: 'mucho gusto, Leo. hasta luego', en: 'nice to meet you, Leo. see you later' },
+      { speaker: 'leo', es: 'adiós', en: 'goodbye' },
+    ],
     lessons: [
       {
         id: 'basics-1',
@@ -56,9 +64,9 @@ export const course: Unit[] = [
         ],
         sentences: [
           {
-            es: 'hola, me llamo Ana',
-            en: 'hello, my name is Ana',
-            enAlt: ['hi, my name is Ana', "hello, my name's Ana", "hi, my name's Ana"],
+            es: 'hola, me llamo Rosana',
+            en: 'hello, my name is Rosana',
+            enAlt: ['hi, my name is Rosana', "hello, my name's Rosana", "hi, my name's Rosana"],
           },
           { es: 'buenos días, ¿cómo estás?', en: 'good morning, how are you?' },
           {
@@ -114,6 +122,14 @@ export const course: Unit[] = [
     title: 'People',
     description: 'Talk about yourself and others',
     color: '#ff5fd7',
+    dialogue: [
+      { speaker: 'rosana', es: 'Leo, él es mi hermano', en: 'Leo, he is my brother' },
+      { speaker: 'leo', es: 'mucho gusto. yo soy Leo', en: 'nice to meet you. I am Leo' },
+      { speaker: 'rosana', es: 'mi hermano es joven y simpático', en: 'my brother is young and nice' },
+      { speaker: 'leo', es: '¿y ella?', en: 'and her?' },
+      { speaker: 'rosana', es: 'ella es mi madre', en: 'she is my mother' },
+      { speaker: 'leo', es: 'la familia es simpática', en: 'the family is nice' },
+    ],
     lessons: [
       {
         id: 'people-1',
@@ -130,7 +146,7 @@ export const course: Unit[] = [
           { es: 'es', en: 'is' },
         ],
         sentences: [
-          { es: 'yo soy Ana', en: 'I am Ana', enAlt: ["I'm Ana"], esAlt: ['soy Ana'] },
+          { es: 'yo soy Rosana', en: 'I am Rosana', enAlt: ["I'm Rosana"], esAlt: ['soy Rosana'] },
           {
             es: 'tú eres mi amigo',
             en: 'you are my friend',
@@ -203,6 +219,14 @@ export const course: Unit[] = [
     title: 'Food',
     description: 'Order food and drinks',
     color: '#ffb000',
+    dialogue: [
+      { speaker: 'leo', es: 'buenos días, quiero el desayuno', en: 'good morning, I want the breakfast' },
+      { speaker: 'rosana', es: 'sí, señor. ¿el café con leche?', en: 'yes, sir. the coffee with milk?' },
+      { speaker: 'leo', es: 'sí, por favor, y el jugo de naranja', en: 'yes, please, and the orange juice' },
+      { speaker: 'rosana', es: '¿el pan?', en: 'the bread?' },
+      { speaker: 'leo', es: 'no, gracias. el desayuno es delicioso', en: 'no, thanks. the breakfast is delicious' },
+      { speaker: 'leo', es: 'la cuenta, por favor', en: 'the bill, please' },
+    ],
     lessons: [
       {
         id: 'food-1',
@@ -302,6 +326,14 @@ export const course: Unit[] = [
     title: 'Travel',
     description: 'Find your way around',
     color: '#00e5ff',
+    dialogue: [
+      { speaker: 'rosana', es: 'perdón, ¿dónde está el hotel?', en: 'excuse me, where is the hotel?' },
+      { speaker: 'leo', es: 'el hotel está a la derecha, cerca', en: 'the hotel is to the right, nearby' },
+      { speaker: 'rosana', es: 'gracias. ¿y el aeropuerto?', en: 'thanks. and the airport?' },
+      { speaker: 'leo', es: 'el aeropuerto está lejos', en: 'the airport is far' },
+      { speaker: 'rosana', es: 'necesito un taxi, por favor', en: 'I need a taxi, please' },
+      { speaker: 'leo', es: 'sí, señora', en: "yes, ma'am" },
+    ],
     lessons: [
       {
         id: 'travel-1',
@@ -398,6 +430,14 @@ export const course: Unit[] = [
     title: 'Numbers',
     description: 'Count and talk about quantity',
     color: '#33ff66',
+    dialogue: [
+      { speaker: 'rosana', es: '¿tienes dos euros?', en: 'do you have two euros?' },
+      { speaker: 'leo', es: 'no, tengo uno', en: 'no, I have one' },
+      { speaker: 'rosana', es: 'necesito tres euros', en: 'I need three euros' },
+      { speaker: 'leo', es: '¿cuánto cuesta el café?', en: 'how much does the coffee cost?' },
+      { speaker: 'rosana', es: 'cuesta cinco euros', en: 'it costs five euros' },
+      { speaker: 'leo', es: 'no tengo mucho dinero', en: 'I do not have a lot of money' },
+    ],
     lessons: [
       {
         id: 'numbers-1',
@@ -480,6 +520,14 @@ export const course: Unit[] = [
     title: 'Time & Days',
     description: 'Days of the week and telling time',
     color: '#ff5fd7',
+    dialogue: [
+      { speaker: 'leo', es: '¿qué hora es?', en: 'what time is it?' },
+      { speaker: 'rosana', es: 'es tarde, buenas noches', en: 'it is late, good night' },
+      { speaker: 'leo', es: 'mañana es lunes', en: 'tomorrow is Monday' },
+      { speaker: 'rosana', es: 'sí, y hoy es domingo', en: 'yes, and today is Sunday' },
+      { speaker: 'leo', es: 'el desayuno es temprano mañana', en: 'breakfast is early tomorrow' },
+      { speaker: 'rosana', es: 'buenas noches, hasta luego', en: 'good night, see you later' },
+    ],
     lessons: [
       {
         id: 'time-1',
@@ -576,6 +624,14 @@ export const course: Unit[] = [
     title: 'Colors & Clothes',
     description: 'Describe what you see and wear',
     color: '#ffb000',
+    dialogue: [
+      { speaker: 'rosana', es: 'quiero una camisa nueva', en: 'I want a new shirt' },
+      { speaker: 'leo', es: '¿la camisa roja?', en: 'the red shirt?' },
+      { speaker: 'rosana', es: 'no, la camisa azul', en: 'no, the blue shirt' },
+      { speaker: 'leo', es: '¿cuánto cuesta?', en: 'how much does it cost?' },
+      { speaker: 'rosana', es: 'cuesta diez euros. es barata', en: 'it costs ten euros. it is cheap' },
+      { speaker: 'leo', es: 'sí, y es bonita', en: 'yes, and it is pretty' },
+    ],
     lessons: [
       {
         id: 'colors-1',
@@ -654,6 +710,14 @@ export const course: Unit[] = [
     title: 'Home',
     description: 'Around the house',
     color: '#00e5ff',
+    dialogue: [
+      { speaker: 'leo', es: 'hola Rosana, bienvenida', en: 'hello Rosana, welcome' },
+      { speaker: 'rosana', es: 'gracias. la casa es grande y bonita', en: 'thanks. the house is big and pretty' },
+      { speaker: 'leo', es: 'sí. la cocina está a la izquierda', en: 'yes. the kitchen is to the left' },
+      { speaker: 'rosana', es: '¿y el baño?', en: 'and the bathroom?' },
+      { speaker: 'leo', es: 'el baño está a la derecha', en: 'the bathroom is to the right' },
+      { speaker: 'rosana', es: 'el gato está en el jardín', en: 'the cat is in the garden' },
+    ],
     lessons: [
       {
         id: 'home-1',
@@ -748,6 +812,14 @@ export const course: Unit[] = [
     title: 'Work & School',
     description: 'Jobs, studying, and the office',
     color: '#33ff66',
+    dialogue: [
+      { speaker: 'rosana', es: 'trabajo en una oficina', en: 'I work in an office' },
+      { speaker: 'leo', es: 'yo soy profesor', en: 'I am a teacher' },
+      { speaker: 'rosana', es: '¿la escuela es grande?', en: 'is the school big?' },
+      { speaker: 'leo', es: 'sí, y los estudiantes son inteligentes', en: 'yes, and the students are intelligent' },
+      { speaker: 'rosana', es: 'el trabajo es importante', en: 'the work is important' },
+      { speaker: 'leo', es: 'sí, y es difícil', en: 'yes, and it is difficult' },
+    ],
     lessons: [
       {
         id: 'work-1',
@@ -844,6 +916,14 @@ export const course: Unit[] = [
     title: 'Weather & Nature',
     description: 'Seasons, weather, and the outdoors',
     color: '#ff5fd7',
+    dialogue: [
+      { speaker: 'leo', es: 'hace frío hoy', en: 'it is cold today' },
+      { speaker: 'rosana', es: 'sí, es invierno', en: 'yes, it is winter' },
+      { speaker: 'leo', es: 'nieva en la montaña', en: 'it snows in the mountains' },
+      { speaker: 'rosana', es: 'la nieve es bonita', en: 'the snow is pretty' },
+      { speaker: 'leo', es: 'quiero el verano', en: 'I want the summer' },
+      { speaker: 'rosana', es: 'sí, hace calor y hace sol', en: 'yes, it is hot and it is sunny' },
+    ],
     lessons: [
       {
         id: 'weather-1',
@@ -935,6 +1015,14 @@ export const course: Unit[] = [
     title: 'Hobbies',
     description: 'Music, sports, and going out',
     color: '#ffb000',
+    dialogue: [
+      { speaker: 'rosana', es: 'me gusta la música', en: 'I like music' },
+      { speaker: 'leo', es: 'yo toco la guitarra', en: 'I play the guitar' },
+      { speaker: 'rosana', es: 'yo canto y bailo', en: 'I sing and dance' },
+      { speaker: 'leo', es: 'la fiesta es el sábado', en: 'the party is on Saturday' },
+      { speaker: 'rosana', es: 'sí, bailo en la fiesta', en: 'yes, I dance at the party' },
+      { speaker: 'leo', es: 'y yo escucho la música', en: 'and I listen to the music' },
+    ],
     lessons: [
       {
         id: 'hobbies-1',
@@ -1038,6 +1126,14 @@ export const course: Unit[] = [
     title: 'Health & Body',
     description: 'The body and feeling well',
     color: '#00e5ff',
+    dialogue: [
+      { speaker: 'leo', es: 'estoy enfermo hoy', en: 'I am sick today' },
+      { speaker: 'rosana', es: 'lo siento, Leo', en: 'I am sorry, Leo' },
+      { speaker: 'leo', es: 'me duele la cabeza', en: 'my head hurts' },
+      { speaker: 'rosana', es: 'la medicina está en la cocina', en: 'the medicine is in the kitchen' },
+      { speaker: 'leo', es: 'gracias, Rosana', en: 'thank you, Rosana' },
+      { speaker: 'rosana', es: 'de nada. la salud es importante', en: 'you are welcome. health is important' },
+    ],
     lessons: [
       {
         id: 'health-1',

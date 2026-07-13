@@ -29,6 +29,7 @@ function freshProgress(): Progress {
     lastHeartRefill: todayISO(),
     completedLessons: {},
     wordStats: {},
+    dialoguesSeen: {},
   }
 }
 
@@ -62,6 +63,15 @@ export function sanitizeProgress(raw: unknown): Progress {
     }
   }
 
+  const dialoguesSeen: Record<string, number> = {}
+  if (typeof r.dialoguesSeen === 'object' && r.dialoguesSeen !== null) {
+    for (const [key, value] of Object.entries(r.dialoguesSeen as Record<string, unknown>)) {
+      if (typeof value === 'number' && Number.isFinite(value) && value > 0) {
+        dialoguesSeen[key] = value
+      }
+    }
+  }
+
   return {
     xp: num(r.xp, 0),
     hearts: Math.min(MAX_HEARTS, num(r.hearts, MAX_HEARTS)),
@@ -70,6 +80,7 @@ export function sanitizeProgress(raw: unknown): Progress {
     lastHeartRefill: dateStr(r.lastHeartRefill),
     completedLessons,
     wordStats,
+    dialoguesSeen,
   }
 }
 
@@ -162,7 +173,24 @@ export function useProgress() {
     setProgress(next)
   }, [])
 
-  return { progress, loseHeart, completeLesson, refillHearts, replaceProgress, recordWordResult }
+  /** First viewing of a unit's dialogue earns a little XP; rewatches are free. */
+  const markDialogueSeen = useCallback((unitId: string, xpFirstView: number) => {
+    setProgress((p) => ({
+      ...p,
+      xp: p.xp + ((p.dialoguesSeen[unitId] ?? 0) === 0 ? xpFirstView : 0),
+      dialoguesSeen: { ...p.dialoguesSeen, [unitId]: (p.dialoguesSeen[unitId] ?? 0) + 1 },
+    }))
+  }, [])
+
+  return {
+    progress,
+    loseHeart,
+    completeLesson,
+    refillHearts,
+    replaceProgress,
+    recordWordResult,
+    markDialogueSeen,
+  }
 }
 
 /** A lesson is unlocked when every lesson before it has been completed at least once. */

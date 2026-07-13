@@ -14,13 +14,20 @@ if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
   })
 }
 
-export function speakSpanish(text: string) {
+export function speakSpanish(text: string, options?: { pitch?: number }) {
   if (!('speechSynthesis' in window)) return
   window.speechSynthesis.cancel()
   const utterance = new SpeechSynthesisUtterance(text)
   utterance.lang = 'es-ES'
   utterance.rate = 0.9
+  utterance.pitch = options?.pitch ?? 1
   const voice = spanishVoice()
   if (voice) utterance.voice = voice
   window.speechSynthesis.speak(utterance)
+}
+
+/** Distinct voices for the two dialogue characters, via pitch. */
+export const SPEAKER_PITCH: Record<string, number> = {
+  rosana: 1.2,
+  leo: 0.8,
 }

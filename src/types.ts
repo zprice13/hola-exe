@@ -19,11 +19,19 @@ export interface Lesson {
   sentences: SentenceItem[]
 }
 
+export interface DialogueLine {
+  speaker: 'rosana' | 'leo'
+  es: string
+  en: string
+}
+
 export interface Unit {
   id: string
   title: string
   description: string
   color: string
+  /** Short scripted scene introducing the unit's phrases in context */
+  dialogue: DialogueLine[]
   lessons: Lesson[]
 }
 
@@ -85,4 +93,6 @@ export interface Progress {
   completedLessons: Record<string, number> // lessonId -> times completed
   /** Per-item answer history (key = vocab/sentence es text), drives practice mode */
   wordStats: Record<string, { seen: number; missed: number }>
+  /** unitId -> times the unit's intro dialogue was viewed */
+  dialoguesSeen: Record<string, number>
 }
