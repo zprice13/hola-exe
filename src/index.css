@@ -76,6 +76,291 @@ button:disabled {
   color: var(--accent);
 }
 
+/* ---------- Boot sequence ---------- */
+
+.boot-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9998; /* below the scanline overlay so the CRT effect covers it */
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 1;
+  transition: opacity 0.4s;
+}
+
+.boot-screen.leaving {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.boot-lines {
+  width: min(560px, calc(100vw - 48px));
+  font-size: 14px;
+  line-height: 2;
+  color: var(--text);
+}
+
+.boot-line {
+  opacity: 0;
+  animation: boot-appear 0.05s steps(1) forwards;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.boot-line:first-child {
+  color: var(--accent);
+  text-shadow: 0 0 12px var(--accent-glow);
+}
+
+@keyframes boot-appear {
+  to {
+    opacity: 1;
+  }
+}
+
+.boot-bar {
+  margin-top: 10px;
+  height: 12px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.boot-fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent-glow);
+  animation: boot-load 0.7s steps(14) forwards;
+}
+
+@keyframes boot-load {
+  to {
+    width: 100%;
+  }
+}
+
+.boot-skip {
+  position: fixed;
+  bottom: max(24px, env(safe-area-inset-bottom));
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-light);
+  animation: boot-appear 0.05s steps(1) 1.2s forwards;
+  opacity: 0;
+}
+
+/* ---------- Disk operations modal ---------- */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background: rgba(2, 5, 3, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.terminal-window {
+  width: min(440px, 100%);
+  background: var(--card);
+  border: 1px solid var(--accent-dim);
+  border-radius: 12px;
+  box-shadow: 0 0 40px var(--accent-glow);
+  overflow: hidden;
+}
+
+.window-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--card-raised);
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  color: var(--accent);
+}
+
+.window-close {
+  border: none;
+  background: none;
+  color: var(--text-light);
+  font-size: 15px;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.window-close:hover {
+  color: var(--text);
+  background: var(--card);
+}
+
+.window-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+}
+
+.window-tabs button {
+  flex: 1;
+  padding: 10px;
+  background: none;
+  border: none;
+  color: var(--text-light);
+  font-size: 13px;
+  letter-spacing: 1.5px;
+}
+
+.window-tabs button.active {
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+  box-shadow: inset 0 -2px 0 var(--accent);
+}
+
+.window-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.window-text {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-light);
+  text-align: center;
+}
+
+.ok-text {
+  color: var(--accent);
+}
+
+.error-text {
+  color: var(--danger);
+}
+
+.drive-bay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.floppy {
+  color: var(--accent);
+  filter: drop-shadow(0 0 10px var(--accent-glow));
+  transition: transform 0.2s;
+}
+
+.floppy.inserting {
+  animation: floppy-insert 1.2s ease-in forwards;
+}
+
+.floppy.inserted {
+  transform: translateY(6px) scale(0.92);
+}
+
+@keyframes floppy-insert {
+  0% {
+    transform: translateY(0);
+  }
+  35% {
+    transform: translateY(-8px);
+  }
+  100% {
+    transform: translateY(10px) scale(0.92);
+  }
+}
+
+.drive-slot {
+  width: 110px;
+  height: 10px;
+  margin-top: 4px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: var(--bg);
+  position: relative;
+}
+
+.drive-led {
+  position: absolute;
+  right: -16px;
+  top: 2px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+
+.drive-led.busy {
+  background: var(--danger);
+  animation: led-blink 0.25s steps(1) infinite;
+}
+
+.drive-led.ok {
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+
+@keyframes led-blink {
+  50% {
+    opacity: 0.2;
+  }
+}
+
+.save-code {
+  width: 100%;
+  font-family: inherit;
+  font-size: 12px;
+  padding: 10px;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--accent);
+  word-break: break-all;
+  resize: none;
+}
+
+.save-code:focus-visible {
+  border-color: var(--accent);
+}
+
+.window-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.ghost-btn {
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: none;
+  border: 1px solid var(--accent-dim);
+  border-radius: 10px;
+}
+
+.ghost-btn:hover {
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+.window-body .primary-btn {
+  margin: 0;
+}
+
 /* ---------- Home ---------- */
 
 .home {
@@ -105,6 +390,25 @@ button:disabled {
 .stat-key {
   color: var(--text-light);
   font-weight: 400;
+}
+
+.save-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--accent);
+  font-size: 14px;
+  font-family: inherit;
+  margin-right: auto; /* pin to the left, stats stay right */
+}
+
+.save-chip:hover {
+  border-color: var(--accent-dim);
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
+.save-chip svg {
+  flex-shrink: 0;
 }
 
 .app-title {

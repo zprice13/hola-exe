@@ -31,8 +31,8 @@ function freshProgress(): Progress {
   }
 }
 
-/** Coerce whatever was in storage into a valid Progress shape, field by field. */
-function sanitize(raw: unknown): Progress {
+/** Coerce untrusted data (storage, imported save codes) into a valid Progress shape. */
+export function sanitizeProgress(raw: unknown): Progress {
   const fresh = freshProgress()
   if (typeof raw !== 'object' || raw === null) return fresh
   const r = raw as Record<string, unknown>
@@ -64,7 +64,7 @@ function load(): Progress {
   let stored: Progress
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    stored = raw ? sanitize(JSON.parse(raw)) : freshProgress()
+    stored = raw ? sanitizeProgress(JSON.parse(raw)) : freshProgress()
   } catch {
     stored = freshProgress()
   }
@@ -130,7 +130,12 @@ export function useProgress() {
     setProgress((p) => ({ ...p, hearts: MAX_HEARTS }))
   }, [])
 
-  return { progress, loseHeart, completeLesson, refillHearts }
+  /** Wholesale replacement, used when loading a save file. */
+  const replaceProgress = useCallback((next: Progress) => {
+    setProgress(next)
+  }, [])
+
+  return { progress, loseHeart, completeLesson, refillHearts, replaceProgress }
 }
 
 /** A lesson is unlocked when every lesson before it has been completed at least once. */
