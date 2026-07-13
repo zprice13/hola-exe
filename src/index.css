@@ -729,10 +729,18 @@ button:disabled {
 .portrait {
   margin: 0;
   font-family: inherit;
-  font-size: 11px;
-  line-height: 1.1;
+  /* 44-col halftone art: keep it comfortably inside a phone viewport */
+  font-size: 8px;
+  line-height: 1;
+  letter-spacing: 0;
   white-space: pre;
   animation: portrait-in 0.25s steps(3);
+}
+
+@media (min-width: 480px) {
+  .portrait {
+    font-size: 10px;
+  }
 }
 
 @keyframes portrait-in {
