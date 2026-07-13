@@ -46,9 +46,10 @@ body {
 }
 
 #root {
-  /* percentage chain, not dvh: iOS standalone under-reports dvh after
-     keyboard use, leaving dead space at the bottom of the screen */
-  height: 100%;
+  /* --app-height is measured from visualViewport in main.tsx: on iOS
+     standalone the layout viewport itself can be under-sized, so CSS units
+     (%, vh, dvh) all inherit the same wrong height */
+  height: var(--app-height, 100%);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
@@ -582,7 +583,7 @@ button:disabled {
 .lesson-screen {
   display: flex;
   flex-direction: column;
-  min-height: 100%;
+  min-height: var(--app-height, 100%);
 }
 
 .lesson-header-inner,
@@ -1310,7 +1311,7 @@ button:disabled {
 /* ---------- Completion / out of hearts ---------- */
 
 .complete-screen {
-  min-height: 100%;
+  min-height: var(--app-height, 100%);
   display: flex;
   align-items: center;
   justify-content: center;
