@@ -1,7 +1,6 @@
 /**
- * Halftone ASCII busts for the dialogue cast — 44 columns, ' .:-=+*#%@' ramp.
- * GENERATED from vector sources: see scripts/portrait-lab.html. Regenerate
- * there rather than editing these strings by hand.
+ * Halftone ASCII art — ' .:-=+*#%@' ramp, GENERATED from the vector sources
+ * in scripts/portrait-lab.html. Regenerate there rather than hand-editing.
  */
 export const PORTRAITS: Record<'rosana' | 'leo', string> = {
   rosana: `
@@ -48,3 +47,59 @@ export const PORTRAITS: Record<'rosana' | 'leo', string> = {
         .-----------=++=-----------.
        .----------------------------.`,
 }
+
+/** 18-column head crops for chat-bubble avatars. */
+export const MINI_PORTRAITS: Record<'rosana' | 'leo', string> = {
+  rosana: `
+    .::----::.
+  -+***+++++++=-
+ =*++++++++++++==
+:+++++*####*+++++:
+:++++#%%%%%%#*+++:
+:+++#%##%%##%%+++:
+:+++%%%##%#%%%+++:
+-++*=%%%%%%%%=*++-
+-+++ -*%%%%*- +++-
+-++-   =##=   -++-`,
+  leo: `
+    : -- =: -..
+   :+=+++++=+==.
+   +*########*+.
+   .#%%%%%%%%#.
+    +=++--++=+
+  .#+=++--++=+#.
+   :*%%%##%%%#:
+    :*######*:
+      .+##+.`,
+}
+
+/** Boot-screen \`>_\` splash. */
+export const BOOT_LOGO = `
+         -:
+       .*@@#+:
+       +@@@@@@%*-.
+        .-*%@@@@@@*=.
+            :+#@@@@@@#+:
+               -%@@@@@@@#:
+            :+#@@@@@@#+:
+        .-+%@@@@@@#=:  -++++++++++
+       +@@@@@@%*-.     +@@@@@@@@@@
+       .#@@%+-         .::::::::::
+         =:`
+
+/** Lesson-complete trophy. */
+export const COMPLETE_ART = `
+      ......................
+    ..........................
+  ..:*+:.:--------------:..-+:..
+ ....-===+%%%%%%%%%%%%%%+==-:....
+ ...:+-:.=%%%%%%##%%%%%%=.:-+:...
+ ...=+...:%%%#**--**#%%%:...+=....
+ ...:+-...+%%%#=---#%%%+...-+:....
+ ....:===--+%%#+##+#%%+---==:....
+ .......:--.-*%%%%%%*-.--:.......
+  ............:=##=:.........-..
+    ...........-**-...........
+      .......:######-.......
+         ..-==++++++==-..
+           :----------:`
