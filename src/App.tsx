@@ -53,8 +53,10 @@ export default function App() {
     return (
       <div className="complete-screen">
         <div className="complete-card">
-          <div className="complete-emoji">💔</div>
-          <h1>You're out of hearts!</h1>
+          <div className="complete-glyph danger" aria-hidden="true">
+            [♥ 0]
+          </div>
+          <h1>out of hearts</h1>
           <p className="complete-note">Hearts refill every day. For now, here's a freebie — keep practicing!</p>
           <button
             type="button"

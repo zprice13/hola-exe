@@ -39,7 +39,7 @@ export function ChoiceExercise({
       <div className="prompt-row">
         {speak && (
           <button type="button" className="speaker-btn" onClick={() => speakSpanish(speak)} aria-label="Play audio">
-            🔊
+            ►))
           </button>
         )}
         <span className="prompt-text">{prompt}</span>

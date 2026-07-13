@@ -8,16 +8,22 @@ export function LessonComplete({ xpEarned, mistakes, onContinue }: Props) {
   return (
     <div className="complete-screen">
       <div className="complete-card">
-        <div className="complete-emoji">🎉</div>
-        <h1>Lesson complete!</h1>
+        <div className="complete-glyph" aria-hidden="true">
+          [✓]
+        </div>
+        <h1>
+          lesson complete<span className="cursor">_</span>
+        </h1>
         <div className="complete-stats">
           <div className="complete-stat">
-            <span className="complete-stat-label">XP earned</span>
-            <span className="complete-stat-value">⚡ {xpEarned}</span>
+            <span className="complete-stat-label">xp earned</span>
+            <span className="complete-stat-value">+{xpEarned}</span>
           </div>
           <div className="complete-stat">
-            <span className="complete-stat-label">Accuracy</span>
-            <span className="complete-stat-value">{mistakes === 0 ? 'Perfect! 💯' : `${mistakes} mistake${mistakes === 1 ? '' : 's'}`}</span>
+            <span className="complete-stat-label">accuracy</span>
+            <span className="complete-stat-value">
+              {mistakes === 0 ? '100% ✓' : `${mistakes} miss${mistakes === 1 ? '' : 'es'}`}
+            </span>
           </div>
         </div>
         <button type="button" className="primary-btn" onClick={onContinue}>

@@ -1,8 +1,9 @@
-# LingoApp
+# hola.exe
 
-A Duolingo-style language learning web app. The starter course teaches Spanish
-to English speakers across four units (Basics, People, Food, Travel), each with
-two lessons.
+A Duolingo-style language learning web app with a dark-only Y2K/Matrix
+terminal theme — monospace type, phosphor-green accents, ASCII glyphs, and
+subtle CRT scanlines. The starter course teaches Spanish to English speakers
+across four units (Basics, People, Food, Travel), each with two lessons.
 
 ## Features
 

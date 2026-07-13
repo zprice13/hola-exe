@@ -142,7 +142,7 @@ export function LessonSession({ lesson, hearts, onLoseHeart, onComplete, onQuit,
             <div className="progress-fill" style={{ width: `${progressPct}%` }} />
           </div>
           <div className="hearts" role="img" aria-label={`${hearts} hearts left`}>
-            ❤️ {hearts}
+            ♥ {hearts}
           </div>
         </div>
       </header>
@@ -202,10 +202,10 @@ export function LessonSession({ lesson, hearts, onLoseHeart, onComplete, onQuit,
             <div className="feedback-row">
               <div className="feedback-text" role="status">
                 {feedback.status === 'correct' ? (
-                  <strong>Nice job! ✅</strong>
+                  <strong>✓ correct</strong>
                 ) : (
                   <>
-                    <strong>Correct answer:</strong> {feedback.correctAnswer}
+                    <strong>✗ correct answer:</strong> {feedback.correctAnswer}
                   </>
                 )}
               </div>

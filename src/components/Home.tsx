@@ -12,23 +12,26 @@ export function Home({ progress, onStartLesson }: Props) {
     <div className="home">
       <header className="stats-bar">
         <span className="stat" role="img" aria-label={`${progress.streak} day streak`} title="Day streak">
-          🔥 {progress.streak}
+          <span className="stat-key">streak</span> {progress.streak}
         </span>
         <span className="stat" role="img" aria-label={`${progress.xp} XP`} title="Total XP">
-          ⚡️ {progress.xp} XP
+          <span className="stat-key">xp</span> {progress.xp}
         </span>
         <span className="stat" role="img" aria-label={`${progress.hearts} hearts`} title="Hearts">
-          ❤️ {progress.hearts}
+          <span className="stat-key">♥</span> {progress.hearts}
         </span>
       </header>
 
-      <h1 className="app-title">¡Hola! Learn Spanish</h1>
-      <p className="app-subtitle">Pick a lesson to start earning XP</p>
+      <h1 className="app-title">
+        <span className="title-prompt">&gt; </span>hola.exe<span className="cursor">_</span>
+      </h1>
+      <p className="app-subtitle">// select a lesson to begin transmission</p>
 
       <div className="units">
-        {course.map((unit) => (
+        {course.map((unit, unitIndex) => (
           <section key={unit.id} className="unit" style={{ ['--unit-color' as string]: unit.color }}>
             <div className="unit-header">
+              <span className="unit-index">UNIT {String(unitIndex + 1).padStart(2, '0')}</span>
               <h2>{unit.title}</h2>
               <p>{unit.description}</p>
             </div>
@@ -44,7 +47,9 @@ export function Home({ progress, onStartLesson }: Props) {
                     disabled={!unlocked}
                     onClick={() => onStartLesson(lesson.id)}
                   >
-                    <span className="lesson-icon">{unlocked ? (completions > 0 ? '👑' : '⭐') : '🔒'}</span>
+                    <span className="lesson-icon" aria-hidden="true">
+                      {unlocked ? (completions > 0 ? '[✓]' : '[▸]') : '[░]'}
+                    </span>
                     <span className="lesson-name">{lesson.title}</span>
                     {completions > 0 && <span className="lesson-crowns">×{completions}</span>}
                   </button>

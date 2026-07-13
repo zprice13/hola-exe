@@ -13,7 +13,7 @@ export const course: Unit[] = [
     id: 'basics',
     title: 'Basics',
     description: 'Say hello and introduce yourself',
-    color: '#58cc02',
+    color: '#33ff66',
     lessons: [
       {
         id: 'basics-1',
@@ -81,7 +81,7 @@ export const course: Unit[] = [
     id: 'people',
     title: 'People',
     description: 'Talk about yourself and others',
-    color: '#ce82ff',
+    color: '#ff5fd7',
     lessons: [
       {
         id: 'people-1',
@@ -139,7 +139,7 @@ export const course: Unit[] = [
     id: 'food',
     title: 'Food',
     description: 'Order food and drinks',
-    color: '#ff9600',
+    color: '#ffb000',
     lessons: [
       {
         id: 'food-1',
@@ -206,7 +206,7 @@ export const course: Unit[] = [
     id: 'travel',
     title: 'Travel',
     description: 'Find your way around',
-    color: '#1cb0f6',
+    color: '#00e5ff',
     lessons: [
       {
         id: 'travel-1',

@@ -16,7 +16,7 @@ export function TypeExercise({ prompt, speak, value, locked, onChange, onSubmit 
       <div className="prompt-row">
         {speak && (
           <button type="button" className="speaker-btn" onClick={() => speakSpanish(speak)} aria-label="Play audio">
-            🔊
+            ►))
           </button>
         )}
         <span className="prompt-text">{prompt}</span>
