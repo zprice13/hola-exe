@@ -1,3 +1,5 @@
+import { COMPLETE_ART } from './portraits'
+
 interface Props {
   xpEarned: number
   mistakes: number
@@ -8,9 +10,9 @@ export function LessonComplete({ xpEarned, mistakes, onContinue }: Props) {
   return (
     <div className="complete-screen">
       <div className="complete-card">
-        <div className="complete-glyph" aria-hidden="true">
-          [✓]
-        </div>
+        <pre className="complete-art" aria-hidden="true">
+          {COMPLETE_ART}
+        </pre>
         <h1>
           lesson complete<span className="cursor">_</span>
         </h1>

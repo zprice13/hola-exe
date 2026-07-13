@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import type { Unit } from '../types'
 import { speakSpanish } from '../lib/audio'
-import { PORTRAITS } from './portraits'
+import { MINI_PORTRAITS, PORTRAITS } from './portraits'
 
 interface Props {
   unit: Unit
@@ -61,9 +61,14 @@ export function DialogueScreen({ unit, onDone, onQuit }: Props) {
                 onClick={() => speakLine(i)}
                 title="Replay audio"
               >
-                <span className="bubble-speaker">{NAMES[line.speaker]}</span>
-                <span className="bubble-es">{line.es}</span>
-                <span className="bubble-en">{line.en}</span>
+                <pre className="bubble-avatar" aria-hidden="true">
+                  {MINI_PORTRAITS[line.speaker]}
+                </pre>
+                <span className="bubble-content">
+                  <span className="bubble-speaker">{NAMES[line.speaker]}</span>
+                  <span className="bubble-es">{line.es}</span>
+                  <span className="bubble-en">{line.en}</span>
+                </span>
               </button>
             ))}
             <div ref={endRef} />

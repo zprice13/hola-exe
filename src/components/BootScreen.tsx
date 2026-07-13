@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { BOOT_LOGO } from './portraits'
 
 const LINES = [
   'HOLA.EXE v1.2 — language learning system',
@@ -34,6 +35,7 @@ export function BootScreen({ onDone }: { onDone: () => void }) {
       aria-hidden="true"
     >
       <div className="boot-lines">
+        <pre className="boot-logo">{BOOT_LOGO}</pre>
         {LINES.map((line, i) => (
           <div key={i} className="boot-line" style={{ animationDelay: `${i * LINE_DELAY}s` }}>
             {line}

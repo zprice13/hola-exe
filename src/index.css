@@ -129,6 +129,18 @@ button:disabled {
   color: var(--text);
 }
 
+.boot-logo {
+  margin: 0 0 16px;
+  font-family: inherit;
+  font-size: 9px;
+  line-height: 1;
+  white-space: pre;
+  color: var(--accent);
+  text-shadow: 0 0 16px color-mix(in srgb, var(--accent) 40%, transparent);
+  animation: boot-appear 0.05s steps(1) forwards;
+  opacity: 0;
+}
+
 .boot-line {
   opacity: 0;
   animation: boot-appear 0.05s steps(1) forwards;
@@ -779,16 +791,37 @@ button:disabled {
 
 .bubble {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
-  max-width: 85%;
-  padding: 12px 16px;
+  align-items: flex-start;
+  gap: 10px;
+  max-width: 92%;
+  padding: 12px 14px;
   text-align: left;
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 14px;
   font-family: inherit;
   animation: bubble-in 0.25s ease-out;
+}
+
+.bubble.leo {
+  flex-direction: row-reverse;
+}
+
+.bubble-avatar {
+  margin: 0;
+  font-family: inherit;
+  font-size: 5px;
+  line-height: 1;
+  white-space: pre;
+  opacity: 0.9;
+  flex-shrink: 0;
+}
+
+.bubble-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
 }
 
 @keyframes bubble-in {
@@ -1201,6 +1234,18 @@ button:disabled {
   font-weight: 800;
   color: var(--accent);
   text-shadow: 0 0 22px color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+.complete-art {
+  margin: 0 auto;
+  font-family: inherit;
+  font-size: 9px;
+  line-height: 1;
+  white-space: pre;
+  display: inline-block;
+  text-align: left;
+  color: var(--accent);
+  text-shadow: 0 0 18px color-mix(in srgb, var(--accent) 40%, transparent);
 }
 
 .complete-glyph.danger {
