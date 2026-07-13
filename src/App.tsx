@@ -9,6 +9,7 @@ import { LessonComplete } from './components/LessonComplete'
 import { BootScreen } from './components/BootScreen'
 import { SaveModal } from './components/SaveModal'
 import { DialogueScreen } from './components/DialogueScreen'
+import { VerbsScreen } from './components/VerbsScreen'
 
 const DIALOGUE_XP = 10
 
@@ -18,6 +19,7 @@ type Screen =
   | { name: 'complete'; xpEarned: number; mistakes: number }
   | { name: 'outOfHearts' }
   | { name: 'dialogue'; unitId: string }
+  | { name: 'verbs' }
 
 export default function App() {
   const {
@@ -80,6 +82,15 @@ export default function App() {
         </>
       )
     }
+  }
+
+  if (screen.name === 'verbs') {
+    return (
+      <>
+        <VerbsScreen progress={progress} onQuit={() => setScreen({ name: 'home' })} />
+        {overlays}
+      </>
+    )
   }
 
   if (screen.name === 'session') {
@@ -154,6 +165,7 @@ export default function App() {
         onPractice={startPractice}
         practiceReady={practiceReady}
         onOpenDialogue={(unitId) => setScreen({ name: 'dialogue', unitId })}
+        onOpenVerbs={() => setScreen({ name: 'verbs' })}
       />
       {overlays}
     </>

@@ -10,6 +10,7 @@ interface Props {
   onPractice: () => void
   practiceReady: boolean
   onOpenDialogue: (unitId: string) => void
+  onOpenVerbs: () => void
 }
 
 export function Home({
@@ -19,6 +20,7 @@ export function Home({
   onPractice,
   practiceReady,
   onOpenDialogue,
+  onOpenVerbs,
 }: Props) {
   return (
     <div className="home">
@@ -42,17 +44,22 @@ export function Home({
       </h1>
       <p className="app-subtitle">// select a lesson to begin transmission</p>
 
-      <button
-        type="button"
-        className="ghost-btn practice-btn"
-        disabled={!practiceReady}
-        onClick={onPractice}
-        title={practiceReady ? 'Re-drill your weakest words' : 'Complete a lesson first'}
-      >
-        ▶ PRACTICE.BIN
-      </button>
+      <div className="home-actions">
+        <button
+          type="button"
+          className="ghost-btn practice-btn"
+          disabled={!practiceReady}
+          onClick={onPractice}
+          title={practiceReady ? 'Re-drill your weakest words' : 'Complete a lesson first'}
+        >
+          ▶ PRACTICE.BIN
+        </button>
+        <button type="button" className="ghost-btn practice-btn" onClick={onOpenVerbs} title="Review verb tables">
+          ▦ VERBS.DAT
+        </button>
+      </div>
       <p className="practice-hint">
-        {practiceReady ? '// re-drill your weakest words' : '// complete a lesson to unlock practice'}
+        {practiceReady ? '// re-drill weak words · review verb tables' : '// complete a lesson to unlock practice'}
       </p>
 
       <div className="units">
