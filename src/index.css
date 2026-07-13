@@ -428,6 +428,20 @@ button:disabled {
   font-size: 14px;
 }
 
+.practice-btn {
+  margin-top: -20px;
+}
+
+.practice-btn:disabled {
+  opacity: 0.4;
+}
+
+.practice-hint {
+  margin: 8px 0 36px;
+  font-size: 13px;
+  color: var(--text-light);
+}
+
 .unit {
   margin-bottom: 40px;
 }

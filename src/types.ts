@@ -38,6 +38,8 @@ export type Exercise =
       options: string[]
       /** Spanish text to speak aloud, if any */
       speak?: string
+      /** Stable id (the vocab's es text) for per-word stats */
+      key?: string
     }
   | {
       type: 'wordBank'
@@ -49,6 +51,7 @@ export type Exercise =
       /** The original Spanish sentence, with punctuation, for display */
       display: string
       speak?: string
+      key?: string
     }
   | {
       type: 'match'
@@ -60,6 +63,7 @@ export type Exercise =
       /** All accepted English translations (primary answer first) */
       answers: string[]
       speak?: string
+      key?: string
     }
 
 export interface Progress {
@@ -71,4 +75,6 @@ export interface Progress {
   /** ISO date hearts were last refilled */
   lastHeartRefill: string | null
   completedLessons: Record<string, number> // lessonId -> times completed
+  /** Per-item answer history (key = vocab/sentence es text), drives practice mode */
+  wordStats: Record<string, { seen: number; missed: number }>
 }
