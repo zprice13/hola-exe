@@ -7,6 +7,7 @@ import { WordBankExercise } from './exercises/WordBankExercise'
 import { MatchExercise } from './exercises/MatchExercise'
 import { TypeExercise } from './exercises/TypeExercise'
 import { IntroCard } from './exercises/IntroCard'
+import { ConjugationCard } from './exercises/ConjugationCard'
 
 export const XP_PER_EXERCISE = 10
 export const PERFECT_BONUS = 20
@@ -34,7 +35,9 @@ export function LessonSession({
 }: Props) {
   const [queue, setQueue] = useState<Exercise[]>(exercises)
   // Teaching cards can't be answered, so they don't pay XP
-  const [initialLength] = useState(queue.filter((e) => e.type !== 'intro').length)
+  const [initialLength] = useState(
+    queue.filter((e) => e.type !== 'intro' && e.type !== 'conjugation').length,
+  )
   const [position, setPosition] = useState(0)
   const [mistakes, setMistakes] = useState(0)
   const [feedback, setFeedback] = useState<Feedback>(null)
@@ -175,6 +178,9 @@ export function LessonSession({
           {current.type === 'intro' && (
             <IntroCard es={current.es} en={current.en} example={current.example} />
           )}
+          {current.type === 'conjugation' && (
+            <ConjugationCard verb={current.verb} translation={current.translation} forms={current.forms} />
+          )}
           {current.type === 'choice' && (
             <ChoiceExercise
               prompt={current.prompt}
@@ -216,7 +222,7 @@ export function LessonSession({
       <footer className={`lesson-footer ${feedback ? feedback.status : ''}`}>
         <div className="lesson-footer-inner">
           {feedback === null ? (
-            current.type === 'intro' ? (
+            current.type === 'intro' || current.type === 'conjugation' ? (
               <button type="button" className="primary-btn" onClick={advance}>
                 Got it
               </button>
