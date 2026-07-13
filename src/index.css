@@ -81,7 +81,9 @@ button:disabled {
 .home {
   max-width: 640px;
   margin: 0 auto;
-  padding: 16px 20px 64px;
+  /* Keep clear of the phone status bar / notch in standalone mode */
+  padding: calc(16px + env(safe-area-inset-top)) max(20px, env(safe-area-inset-left))
+    calc(64px + env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-right));
 }
 
 .stats-bar {
@@ -228,7 +230,7 @@ button:disabled {
 }
 
 .lesson-header {
-  padding: 16px 0 0;
+  padding: calc(16px + env(safe-area-inset-top)) 0 0;
 }
 
 .lesson-header-inner {
@@ -631,7 +633,7 @@ button:disabled {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: calc(20px + env(safe-area-inset-top)) 20px calc(20px + env(safe-area-inset-bottom));
 }
 
 .complete-card {
