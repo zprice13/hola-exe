@@ -29,6 +29,14 @@ export interface Unit {
 
 export type Exercise =
   | {
+      /** Teaching card shown before a never-seen word is quizzed — no wrong answer possible */
+      type: 'intro'
+      es: string
+      en: string
+      speak: string
+      example?: { es: string; en: string }
+    }
+  | {
       type: 'choice'
       /** Text shown to the learner */
       prompt: string

@@ -31,7 +31,7 @@ export default function App() {
       return
     }
     const found = findLesson(lessonId)
-    if (found) setScreen({ name: 'session', lessonId, exercises: buildExercises(found.lesson) })
+    if (found) setScreen({ name: 'session', lessonId, exercises: buildExercises(found.lesson, progress) })
   }
 
   const startPractice = () => {
