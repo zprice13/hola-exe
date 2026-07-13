@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { Exercise } from './types'
-import { findLesson } from './data/course'
+import { course, findLesson } from './data/course'
 import { buildExercises, buildPracticeSession } from './lib/exercises'
 import { useProgress } from './lib/progress'
 import { Home } from './components/Home'
@@ -8,16 +8,27 @@ import { LessonSession } from './components/LessonSession'
 import { LessonComplete } from './components/LessonComplete'
 import { BootScreen } from './components/BootScreen'
 import { SaveModal } from './components/SaveModal'
+import { DialogueScreen } from './components/DialogueScreen'
+
+const DIALOGUE_XP = 10
 
 type Screen =
   | { name: 'home' }
   | { name: 'session'; lessonId: string | null; exercises: Exercise[] }
   | { name: 'complete'; xpEarned: number; mistakes: number }
   | { name: 'outOfHearts' }
+  | { name: 'dialogue'; unitId: string }
 
 export default function App() {
-  const { progress, loseHeart, completeLesson, refillHearts, replaceProgress, recordWordResult } =
-    useProgress()
+  const {
+    progress,
+    loseHeart,
+    completeLesson,
+    refillHearts,
+    replaceProgress,
+    recordWordResult,
+    markDialogueSeen,
+  } = useProgress()
   const [screen, setScreen] = useState<Screen>({ name: 'home' })
   const [booting, setBooting] = useState(
     () => !window.matchMedia('(prefers-reduced-motion: reduce)').matches,
@@ -51,6 +62,25 @@ export default function App() {
       )}
     </>
   )
+
+  if (screen.name === 'dialogue') {
+    const unit = course.find((u) => u.id === screen.unitId)
+    if (unit) {
+      return (
+        <>
+          <DialogueScreen
+            unit={unit}
+            onDone={() => {
+              markDialogueSeen(unit.id, DIALOGUE_XP)
+              setScreen({ name: 'home' })
+            }}
+            onQuit={() => setScreen({ name: 'home' })}
+          />
+          {overlays}
+        </>
+      )
+    }
+  }
 
   if (screen.name === 'session') {
     return (
@@ -123,6 +153,7 @@ export default function App() {
         onOpenSave={() => setShowSave(true)}
         onPractice={startPractice}
         practiceReady={practiceReady}
+        onOpenDialogue={(unitId) => setScreen({ name: 'dialogue', unitId })}
       />
       {overlays}
     </>

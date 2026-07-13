@@ -9,9 +9,17 @@ interface Props {
   onOpenSave: () => void
   onPractice: () => void
   practiceReady: boolean
+  onOpenDialogue: (unitId: string) => void
 }
 
-export function Home({ progress, onStartLesson, onOpenSave, onPractice, practiceReady }: Props) {
+export function Home({
+  progress,
+  onStartLesson,
+  onOpenSave,
+  onPractice,
+  practiceReady,
+  onOpenDialogue,
+}: Props) {
   return (
     <div className="home">
       <header className="stats-bar">
@@ -56,6 +64,24 @@ export function Home({ progress, onStartLesson, onOpenSave, onPractice, practice
               <p>{unit.description}</p>
             </div>
             <div className="lesson-row">
+              {(() => {
+                const unlocked = isLessonUnlocked(progress, unit.lessons[0].id)
+                const seen = (progress.dialoguesSeen[unit.id] ?? 0) > 0
+                return (
+                  <button
+                    type="button"
+                    className={`lesson-node dialogue-node ${unlocked ? '' : 'locked'} ${seen ? 'done' : ''}`}
+                    disabled={!unlocked}
+                    onClick={() => onOpenDialogue(unit.id)}
+                  >
+                    <span className="lesson-icon" aria-hidden="true">
+                      {unlocked ? (seen ? '[✓]' : '[«»]') : '[░]'}
+                    </span>
+                    <span className="lesson-name">{unit.id}.log</span>
+                    {seen && <span className="lesson-crowns">viewed</span>}
+                  </button>
+                )
+              })()}
               {unit.lessons.map((lesson) => {
                 const unlocked = isLessonUnlocked(progress, lesson.id)
                 const completions = progress.completedLessons[lesson.id] ?? 0
