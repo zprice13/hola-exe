@@ -3,19 +3,20 @@ interface Props {
   bankTokens: string[]
   /** Indexes into bankTokens, in the order the learner picked them */
   picked: number[]
-  locked: boolean
+  result: 'correct' | 'wrong' | null
   onPick: (index: number) => void
   onUnpick: (index: number) => void
 }
 
-export function WordBankExercise({ prompt, bankTokens, picked, locked, onPick, onUnpick }: Props) {
+export function WordBankExercise({ prompt, bankTokens, picked, result, onPick, onUnpick }: Props) {
+  const locked = result !== null
   return (
     <div className="exercise">
       <h2 className="exercise-title">Build the sentence in Spanish</h2>
       <div className="prompt-row">
         <span className="prompt-text">{prompt}</span>
       </div>
-      <div className="answer-strip">
+      <div className={`answer-strip ${result ?? ''}`}>
         {picked.length === 0 && <span className="answer-placeholder">Tap the words below</span>}
         {picked.map((index) => (
           <button

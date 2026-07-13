@@ -6,6 +6,10 @@ export interface VocabItem {
 export interface SentenceItem {
   es: string
   en: string
+  /** Alternate English translations accepted in typed exercises */
+  enAlt?: string[]
+  /** Alternate Spanish token sequences (punctuation-free) accepted in word-bank exercises */
+  esAlt?: string[]
 }
 
 export interface Lesson {
@@ -40,6 +44,10 @@ export type Exercise =
       prompt: string
       answerTokens: string[]
       bankTokens: string[]
+      /** All accepted token sequences, as space-joined strings (primary answer first) */
+      accept: string[]
+      /** The original Spanish sentence, with punctuation, for display */
+      display: string
       speak?: string
     }
   | {
@@ -49,7 +57,8 @@ export type Exercise =
   | {
       type: 'type'
       prompt: string
-      answer: string
+      /** All accepted English translations (primary answer first) */
+      answers: string[]
       speak?: string
     }
 

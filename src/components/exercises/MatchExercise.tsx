@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { shuffle } from '../../lib/exercises'
 import { speakSpanish } from '../../lib/audio'
 
@@ -14,7 +14,9 @@ export function MatchExercise({ pairs, onComplete }: Props) {
   const [selectedEs, setSelectedEs] = useState<string | null>(null)
   const [selectedEn, setSelectedEn] = useState<string | null>(null)
   const [matched, setMatched] = useState<Set<string>>(new Set())
-  const [shakeKey, setShakeKey] = useState(0)
+  // A wrong guess flashes both picked cards red with a shake, then clears
+  const [wrongPick, setWrongPick] = useState<{ es: string; en: string } | null>(null)
+  const wrongTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   function tryMatch(es: string | null, en: string | null) {
     if (!es || !en) return
@@ -28,7 +30,9 @@ export function MatchExercise({ pairs, onComplete }: Props) {
         setTimeout(onComplete, 400)
       }
     } else {
-      setShakeKey((k) => k + 1)
+      setWrongPick({ es, en })
+      if (wrongTimer.current) clearTimeout(wrongTimer.current)
+      wrongTimer.current = setTimeout(() => setWrongPick(null), 500)
     }
     setSelectedEs(null)
     setSelectedEn(null)
@@ -56,13 +60,15 @@ export function MatchExercise({ pairs, onComplete }: Props) {
   return (
     <div className="exercise">
       <h2 className="exercise-title">Match the pairs</h2>
-      <div className="match-grid" key={shakeKey}>
+      <div className="match-grid">
         <div className="match-column">
           {esColumn.map((es) => (
             <button
               key={es}
               type="button"
-              className={`match-btn ${selectedEs === es ? 'selected' : ''} ${isEsMatched(es) ? 'matched' : ''}`}
+              className={`match-btn ${selectedEs === es ? 'selected' : ''} ${isEsMatched(es) ? 'matched' : ''} ${
+                wrongPick?.es === es ? 'wrong' : ''
+              }`}
               disabled={isEsMatched(es)}
               onClick={() => pickEs(es)}
             >
@@ -75,7 +81,9 @@ export function MatchExercise({ pairs, onComplete }: Props) {
             <button
               key={en}
               type="button"
-              className={`match-btn ${selectedEn === en ? 'selected' : ''} ${isEnMatched(en) ? 'matched' : ''}`}
+              className={`match-btn ${selectedEn === en ? 'selected' : ''} ${isEnMatched(en) ? 'matched' : ''} ${
+                wrongPick?.en === en ? 'wrong' : ''
+              }`}
               disabled={isEnMatched(en)}
               onClick={() => pickEn(en)}
             >

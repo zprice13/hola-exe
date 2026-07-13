@@ -26,12 +26,16 @@ function tokenize(sentence: string): string[] {
     .filter(Boolean)
 }
 
+// Bare subject pronouns are excluded as distractors: Spanish drops them freely,
+// so offering "yo" next to "quiero..." would make a second correct answer possible.
+const PRONOUN_DISTRACTORS = new Set(['yo', 'tú', 'él', 'ella', 'nosotros', 'ellos'])
+
 function wordBankDistractors(answerTokens: string[], count: number): string[] {
   const pool = course
     .flatMap((u) => u.lessons)
     .flatMap((l) => l.sentences)
     .flatMap((s) => tokenize(s.es))
-    .filter((t) => !answerTokens.includes(t))
+    .filter((t) => !answerTokens.includes(t) && !PRONOUN_DISTRACTORS.has(t))
   return shuffle([...new Set(pool)]).slice(0, count)
 }
 
@@ -39,7 +43,11 @@ function wordBankDistractors(answerTokens: string[], count: number): string[] {
 export function buildExercises(lesson: Lesson): Exercise[] {
   const exercises: Exercise[] = []
 
-  for (const item of lesson.vocab) {
+  // Items whose Spanish and English are identical (e.g. "no") carry zero
+  // information as recognition exercises, so they only appear inside sentences.
+  const askableVocab = lesson.vocab.filter((v) => v.es !== v.en)
+
+  for (const item of askableVocab) {
     // Alternate direction: recognize Spanish, then produce Spanish
     const esToEn = Math.random() < 0.5
     if (esToEn) {
@@ -69,6 +77,8 @@ export function buildExercises(lesson: Lesson): Exercise[] {
       prompt: sentence.en,
       answerTokens,
       bankTokens: shuffle([...answerTokens, ...wordBankDistractors(answerTokens, 3)]),
+      accept: [answerTokens.join(' '), ...(sentence.esAlt ?? [])],
+      display: sentence.es,
       speak: sentence.es,
     })
   }
@@ -78,16 +88,17 @@ export function buildExercises(lesson: Lesson): Exercise[] {
     exercises.push({
       type: 'type',
       prompt: target.es,
-      answer: target.en,
+      answers: [target.en, ...(target.enAlt ?? [])],
       speak: target.es,
     })
   }
 
   const shuffled = shuffle(exercises)
   // Matching makes a good warm-up, so it always leads the session
+  const matchable = askableVocab.length >= 3 ? askableVocab : lesson.vocab
   shuffled.unshift({
     type: 'match',
-    pairs: shuffle(lesson.vocab).slice(0, 5),
+    pairs: shuffle(matchable).slice(0, 5),
   })
   return shuffled
 }
@@ -95,6 +106,11 @@ export function buildExercises(lesson: Lesson): Exercise[] {
 /** Lenient comparison for typed answers: case, punctuation and extra spaces don't matter. */
 export function answersMatch(expected: string, actual: string): boolean {
   return normalize(expected) === normalize(actual)
+}
+
+/** True if the attempt matches any accepted answer. */
+export function anyAnswerMatches(accepted: string[], actual: string): boolean {
+  return accepted.some((a) => answersMatch(a, actual))
 }
 
 function normalize(text: string): string {

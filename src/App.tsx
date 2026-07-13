@@ -15,10 +15,14 @@ export default function App() {
   const { progress, loseHeart, completeLesson, refillHearts } = useProgress()
   const [screen, setScreen] = useState<Screen>({ name: 'home' })
 
+  // Starting a lesson with no hearts would dead-end at the first mistake
+  const startLesson = (lessonId: string) =>
+    setScreen(progress.hearts > 0 ? { name: 'lesson', lessonId } : { name: 'outOfHearts' })
+
   if (screen.name === 'lesson') {
     const found = findLesson(screen.lessonId)
     if (!found) {
-      return <Home progress={progress} onStartLesson={(lessonId) => setScreen({ name: 'lesson', lessonId })} />
+      return <Home progress={progress} onStartLesson={startLesson} />
     }
     return (
       <LessonSession
@@ -67,5 +71,5 @@ export default function App() {
     )
   }
 
-  return <Home progress={progress} onStartLesson={(lessonId) => setScreen({ name: 'lesson', lessonId })} />
+  return <Home progress={progress} onStartLesson={startLesson} />
 }

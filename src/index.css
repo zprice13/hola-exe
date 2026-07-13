@@ -1,13 +1,19 @@
 :root {
   --green: #58cc02;
-  --green-dark: #46a302;
+  /* Dark enough for 4.5:1 white text — used for filled buttons */
+  --green-deep: #338300;
+  --green-deep-shade: #256200;
   --blue: #1cb0f6;
+  --blue-shade: #1899d6;
   --red: #ff4b4b;
   --text: #3c3c3c;
-  --text-light: #777;
+  --text-light: #6f6f6f;
   --border: #e5e5e5;
   --bg: #ffffff;
   --card: #f7f7f7;
+  /* Feedback inks meet 4.5:1 on the tinted footer backgrounds */
+  --feedback-correct: #337000;
+  --feedback-wrong: #b91c1c;
 
   font-family: 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif;
   color: var(--text);
@@ -21,6 +27,8 @@
     --border: #37464f;
     --bg: #131f24;
     --card: #1b2b33;
+    --feedback-correct: #79d635;
+    --feedback-wrong: #ff6b6b;
   }
 }
 
@@ -36,6 +44,15 @@ body {
 button {
   font-family: inherit;
   cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 2px;
 }
 
 /* ---------- Home ---------- */
@@ -71,7 +88,7 @@ button {
 
 .unit-header {
   background: var(--unit-color);
-  color: #fff;
+  color: #17250d;
   border-radius: 16px;
   padding: 16px 20px;
   margin-bottom: 16px;
@@ -84,7 +101,6 @@ button {
 
 .unit-header p {
   margin: 0;
-  opacity: 0.9;
 }
 
 .lesson-row {
@@ -117,7 +133,6 @@ button {
 
 .lesson-node.locked {
   opacity: 0.5;
-  cursor: not-allowed;
 }
 
 .lesson-node.done {
@@ -139,12 +154,22 @@ button {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+}
+
+.lesson-header-inner,
+.lesson-body-inner,
+.lesson-footer-inner {
+  width: 100%;
   max-width: 720px;
   margin: 0 auto;
-  padding: 16px 20px;
+  padding: 0 20px;
 }
 
 .lesson-header {
+  padding: 16px 0 0;
+}
+
+.lesson-header-inner {
   display: flex;
   align-items: center;
   gap: 16px;
@@ -155,7 +180,14 @@ button {
   background: none;
   font-size: 20px;
   color: var(--text-light);
-  padding: 4px 8px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 10px 12px;
+  border-radius: 10px;
+}
+
+.quit-btn:hover {
+  background: var(--card);
 }
 
 .progress-track {
@@ -208,7 +240,7 @@ button {
 }
 
 .speaker-btn {
-  border: 2px solid var(--border);
+  border: 2px solid var(--blue-shade);
   border-bottom-width: 4px;
   border-radius: 12px;
   background: var(--blue);
@@ -216,12 +248,38 @@ button {
   padding: 8px 12px;
 }
 
+.speaker-btn:active {
+  transform: translateY(2px);
+  border-bottom-width: 2px;
+}
+
+/* Shared pressable-card behavior for exercise options */
+
+.choice-btn:not(:disabled):hover,
+.token-btn:not(:disabled):hover,
+.match-btn:not(:disabled):hover {
+  background: color-mix(in srgb, var(--blue) 6%, var(--card));
+}
+
+.choice-btn:not(:disabled):active,
+.token-btn:not(:disabled):active,
+.match-btn:not(:disabled):active {
+  transform: translateY(2px);
+  border-bottom-width: 2px;
+}
+
 /* Choice */
 
 .choice-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
+}
+
+@media (max-width: 560px) {
+  .choice-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .choice-btn {
@@ -241,6 +299,22 @@ button {
   background: color-mix(in srgb, var(--blue) 10%, var(--card));
 }
 
+.choice-btn.correct {
+  border-color: var(--green);
+  color: var(--feedback-correct);
+  background: color-mix(in srgb, var(--green) 12%, var(--card));
+}
+
+.choice-btn.wrong {
+  border-color: var(--red);
+  color: var(--feedback-wrong);
+  background: color-mix(in srgb, var(--red) 10%, var(--card));
+}
+
+.choice-btn.dimmed {
+  opacity: 0.55;
+}
+
 /* Word bank */
 
 .answer-strip {
@@ -252,6 +326,14 @@ button {
   border-bottom: 2px solid var(--border);
   padding: 8px 0 12px;
   margin-bottom: 24px;
+}
+
+.answer-strip.correct {
+  border-bottom-color: var(--green);
+}
+
+.answer-strip.wrong {
+  border-bottom-color: var(--red);
 }
 
 .answer-placeholder {
@@ -309,11 +391,32 @@ button {
 .match-btn.selected {
   border-color: var(--blue);
   color: var(--blue);
+  background: color-mix(in srgb, var(--blue) 10%, var(--card));
 }
 
 .match-btn.matched {
-  opacity: 0.35;
+  opacity: 0.75;
   border-color: var(--green);
+  background: color-mix(in srgb, var(--green) 12%, var(--card));
+  color: var(--feedback-correct);
+}
+
+.match-btn.wrong {
+  border-color: var(--red);
+  color: var(--feedback-wrong);
+  background: color-mix(in srgb, var(--red) 10%, var(--card));
+  animation: shake 0.4s;
+}
+
+@keyframes shake {
+  20%,
+  60% {
+    transform: translateX(-5px);
+  }
+  40%,
+  80% {
+    transform: translateX(5px);
+  }
 }
 
 /* Type */
@@ -330,16 +433,15 @@ button {
   resize: none;
 }
 
-.type-input:focus {
-  outline: none;
+.type-input:focus-visible {
   border-color: var(--blue);
 }
 
-/* Footer / feedback */
+/* Footer / feedback — full-bleed color band, content width-constrained */
 
 .lesson-footer {
   border-top: 2px solid var(--border);
-  padding: 20px 0 8px;
+  padding: 20px 0 max(12px, env(safe-area-inset-bottom));
 }
 
 .lesson-footer.correct {
@@ -359,16 +461,27 @@ button {
   gap: 16px;
 }
 
+@media (max-width: 480px) {
+  .feedback-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .feedback-row .primary-btn {
+    width: 100%;
+  }
+}
+
 .feedback-text {
   font-size: 17px;
 }
 
 .lesson-footer.correct .feedback-text {
-  color: var(--green-dark);
+  color: var(--feedback-correct);
 }
 
 .lesson-footer.incorrect .feedback-text {
-  color: var(--red);
+  color: var(--feedback-wrong);
 }
 
 .primary-btn {
@@ -380,17 +493,25 @@ button {
   letter-spacing: 0.5px;
   text-transform: uppercase;
   color: #fff;
-  background: var(--green);
+  background: var(--green-deep);
   border: none;
-  border-bottom: 4px solid var(--green-dark);
+  border-bottom: 4px solid var(--green-deep-shade);
   border-radius: 14px;
+}
+
+.primary-btn:not(:disabled):hover {
+  background: color-mix(in srgb, #000 10%, var(--green-deep));
+}
+
+.primary-btn:not(:disabled):active {
+  transform: translateY(2px);
+  border-bottom-width: 2px;
 }
 
 .primary-btn:disabled {
   background: var(--border);
   border-bottom-color: var(--border);
   color: var(--text-light);
-  cursor: not-allowed;
 }
 
 /* ---------- Completion ---------- */

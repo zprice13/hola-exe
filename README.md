@@ -9,6 +9,8 @@ two lessons.
 - **Skill path** — units and lessons unlock in order as you complete them
 - **Four exercise types** — multiple choice (both translation directions),
   sentence building from a word bank, pair matching, and typed translation
+- **Forgiving answer checking** — contractions, synonyms, and alternate valid
+  Spanish word orders are accepted (per-sentence accept-lists in the course data)
 - **Game mechanics** — XP per lesson (with a perfect-run bonus), hearts lost on
   mistakes (refilled daily and on lesson completion), and a daily streak
 - **Mistake review** — missed exercises come back at the end of the session

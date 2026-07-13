@@ -11,13 +11,13 @@ export function Home({ progress, onStartLesson }: Props) {
   return (
     <div className="home">
       <header className="stats-bar">
-        <span className="stat" title="Day streak">
+        <span className="stat" role="img" aria-label={`${progress.streak} day streak`} title="Day streak">
           🔥 {progress.streak}
         </span>
-        <span className="stat" title="Total XP">
-          ⚡ {progress.xp} XP
+        <span className="stat" role="img" aria-label={`${progress.xp} XP`} title="Total XP">
+          ⚡️ {progress.xp} XP
         </span>
-        <span className="stat" title="Hearts">
+        <span className="stat" role="img" aria-label={`${progress.hearts} hearts`} title="Hearts">
           ❤️ {progress.hearts}
         </span>
       </header>
@@ -44,7 +44,7 @@ export function Home({ progress, onStartLesson }: Props) {
                     disabled={!unlocked}
                     onClick={() => onStartLesson(lesson.id)}
                   >
-                    <span className="lesson-icon">{unlocked ? (completions > 0 ? '👑' : '★') : '🔒'}</span>
+                    <span className="lesson-icon">{unlocked ? (completions > 0 ? '👑' : '⭐') : '🔒'}</span>
                     <span className="lesson-name">{lesson.title}</span>
                     {completions > 0 && <span className="lesson-crowns">×{completions}</span>}
                   </button>

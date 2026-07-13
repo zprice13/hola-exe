@@ -4,13 +4,33 @@ interface Props {
   prompt: string
   promptLang: 'es' | 'en'
   options: string[]
+  correct: string
   speak?: string
   selected: string | null
-  locked: boolean
+  result: 'correct' | 'wrong' | null
   onSelect: (option: string) => void
 }
 
-export function ChoiceExercise({ prompt, promptLang, options, speak, selected, locked, onSelect }: Props) {
+export function ChoiceExercise({
+  prompt,
+  promptLang,
+  options,
+  correct,
+  speak,
+  selected,
+  result,
+  onSelect,
+}: Props) {
+  const locked = result !== null
+
+  function optionClass(option: string): string {
+    if (!locked) return selected === option ? 'selected' : ''
+    // Once checked: always highlight the right answer; mark a wrong pick red
+    if (option === correct) return 'correct'
+    if (option === selected) return 'wrong'
+    return 'dimmed'
+  }
+
   return (
     <div className="exercise">
       <h2 className="exercise-title">
@@ -29,7 +49,7 @@ export function ChoiceExercise({ prompt, promptLang, options, speak, selected, l
           <button
             key={option}
             type="button"
-            className={`choice-btn ${selected === option ? 'selected' : ''}`}
+            className={`choice-btn ${optionClass(option)}`}
             disabled={locked}
             onClick={() => onSelect(option)}
           >
