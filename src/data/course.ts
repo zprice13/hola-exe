@@ -85,17 +85,21 @@ export const course: Unit[] = [
         id: 'basics-3',
         title: 'Courtesy',
         vocab: [
-          { es: 'perdón', en: 'excuse me' },
+          { es: 'perdón', en: 'excuse me (to get past)' },
           { es: 'lo siento', en: 'I am sorry' },
           { es: 'de nada', en: 'you are welcome' },
           { es: 'hasta luego', en: 'see you later' },
-          { es: 'bienvenido', en: 'welcome' },
+          { es: 'bienvenido', en: 'welcome (to a place)' },
           { es: 'señor', en: 'sir' },
           { es: 'señora', en: "ma'am" },
         ],
         sentences: [
           { es: 'perdón, señor', en: 'excuse me, sir' },
-          { es: 'lo siento, adiós', en: 'I am sorry, goodbye', enAlt: ["I'm sorry, goodbye"] },
+          {
+            es: 'lo siento, adiós',
+            en: 'I am sorry, goodbye',
+            enAlt: ["I'm sorry, goodbye", "I'm sorry, bye", 'I am sorry, bye'],
+          },
           {
             es: 'hasta luego, señora',
             en: "see you later, ma'am",
@@ -170,7 +174,7 @@ export const course: Unit[] = [
           { es: 'alto', en: 'tall' },
           { es: 'joven', en: 'young' },
           { es: 'viejo', en: 'old' },
-          { es: 'simpático', en: 'nice' },
+          { es: 'simpático', en: 'nice (friendly)' },
           { es: 'inteligente', en: 'intelligent' },
         ],
         sentences: [
@@ -182,12 +186,13 @@ export const course: Unit[] = [
           {
             es: 'él es joven y simpático',
             en: 'he is young and nice',
-            enAlt: ["he's young and nice", 'he is young and friendly'],
+            enAlt: ["he's young and nice", 'he is young and friendly', "he's young and friendly"],
+            esAlt: ['es joven y simpático'],
           },
           {
             es: 'mi familia es inteligente',
             en: 'my family is intelligent',
-            enAlt: ['my family is smart'],
+            enAlt: ['my family is smart', "my family's intelligent", "my family's smart"],
           },
         ],
       },
@@ -242,7 +247,7 @@ export const course: Unit[] = [
           {
             es: 'quiero el menú, por favor',
             en: 'I want the menu, please',
-            enAlt: ['I would like the menu, please'],
+            enAlt: ['I would like the menu, please', "I'd like the menu, please"],
             esAlt: ['por favor quiero el menú', 'yo quiero el menú por favor'],
           },
           {
@@ -285,7 +290,7 @@ export const course: Unit[] = [
           {
             es: 'quiero la sopa, por favor',
             en: 'I want the soup, please',
-            enAlt: ['I would like the soup, please'],
+            enAlt: ['I would like the soup, please', "I'd like the soup, please"],
             esAlt: ['por favor quiero la sopa', 'yo quiero la sopa por favor'],
           },
         ],
@@ -369,7 +374,7 @@ export const course: Unit[] = [
           { es: 'la maleta', en: 'the suitcase' },
           { es: 'el billete', en: 'the ticket' },
           { es: 'el autobús', en: 'the bus' },
-          { es: 'la habitación', en: 'the room' },
+          { es: 'la habitación', en: 'the hotel room' },
           { es: 'la llave', en: 'the key' },
         ],
         sentences: [
@@ -410,6 +415,7 @@ export const course: Unit[] = [
           {
             es: 'tengo dos hermanos',
             en: 'I have two brothers',
+            enAlt: ['I have two siblings'],
             esAlt: ['yo tengo dos hermanos'],
           },
           { es: 'el número cinco', en: 'the number five', enAlt: ['number five'] },
@@ -450,7 +456,7 @@ export const course: Unit[] = [
           { es: 'cuesta', en: 'it costs' },
           { es: '¿cuánto?', en: 'how much?' },
           { es: 'mucho', en: 'a lot' },
-          { es: 'poco', en: 'a little' },
+          { es: 'poco', en: 'not much' },
         ],
         sentences: [
           {
@@ -462,7 +468,7 @@ export const course: Unit[] = [
           {
             es: 'tengo poco dinero',
             en: 'I have little money',
-            enAlt: ['I have a little money', "I don't have much money"],
+            enAlt: ["I don't have much money"],
             esAlt: ['yo tengo poco dinero'],
           },
         ],
@@ -488,13 +494,23 @@ export const course: Unit[] = [
           { es: 'mañana', en: 'tomorrow' },
         ],
         sentences: [
-          { es: 'hoy es lunes', en: 'today is Monday', enAlt: ["it's Monday today", 'it is Monday today'] },
+          {
+            es: 'hoy es lunes',
+            en: 'today is Monday',
+            enAlt: ["it's Monday today", 'it is Monday today', "today's Monday"],
+            esAlt: ['es lunes hoy'],
+          },
           {
             es: 'mañana es viernes',
             en: 'tomorrow is Friday',
-            enAlt: ["it's Friday tomorrow", 'it is Friday tomorrow'],
+            enAlt: ["it's Friday tomorrow", 'it is Friday tomorrow', "tomorrow's Friday"],
+            esAlt: ['es viernes mañana'],
           },
-          { es: 'el lunes y el martes', en: 'Monday and Tuesday' },
+          {
+            es: 'el lunes y el martes',
+            en: 'Monday and Tuesday',
+            enAlt: ['on Monday and Tuesday', 'on Monday and on Tuesday'],
+          },
         ],
       },
       {
@@ -507,7 +523,7 @@ export const course: Unit[] = [
           { es: 'el día', en: 'the day' },
           { es: 'la noche', en: 'the night' },
           { es: 'ahora', en: 'now' },
-          { es: 'tiene', en: 'has' },
+          { es: 'tiene', en: 'he/she has' },
         ],
         sentences: [
           {
@@ -515,8 +531,17 @@ export const course: Unit[] = [
             en: 'the week has seven days',
             enAlt: ['a week has seven days'],
           },
-          { es: 'hoy es domingo', en: 'today is Sunday', enAlt: ["it's Sunday today", 'it is Sunday today'] },
-          { es: 'la noche es bonita', en: 'the night is pretty', enAlt: ['the night is beautiful'] },
+          {
+            es: 'hoy es domingo',
+            en: 'today is Sunday',
+            enAlt: ["it's Sunday today", 'it is Sunday today', "today's Sunday"],
+            esAlt: ['es domingo hoy'],
+          },
+          {
+            es: 'la noche es bonita',
+            en: 'the night is pretty',
+            enAlt: ['the night is beautiful', "the night's pretty"],
+          },
         ],
       },
       {
@@ -669,12 +694,19 @@ export const course: Unit[] = [
             es: 'la cama está en el dormitorio',
             en: 'the bed is in the bedroom',
             enAlt: ["the bed's in the bedroom"],
+            esAlt: ['en el dormitorio está la cama'],
           },
           { es: 'la mesa es pequeña', en: 'the table is small', enAlt: ["the table's small"] },
           {
             es: 'la ventana está cerca',
             en: 'the window is near',
-            enAlt: ['the window is close', "the window's near", "the window's close"],
+            enAlt: [
+              'the window is close',
+              "the window's near",
+              "the window's close",
+              'the window is nearby',
+              "the window's nearby",
+            ],
           },
         ],
       },
@@ -693,6 +725,7 @@ export const course: Unit[] = [
           {
             es: 'vivo en la ciudad',
             en: 'I live in the city',
+            enAlt: ['I am living in the city', "I'm living in the city"],
             esAlt: ['yo vivo en la ciudad'],
           },
           {
@@ -734,7 +767,11 @@ export const course: Unit[] = [
             enAlt: ['I am working in an office', "I'm working in an office"],
             esAlt: ['yo trabajo en una oficina'],
           },
-          { es: 'él es profesor', en: 'he is a teacher', enAlt: ["he's a teacher"] },
+          {
+            es: 'él es profesor',
+            en: 'he is a teacher',
+            enAlt: ["he's a teacher", 'he is a professor', "he's a professor"],
+          },
           {
             es: 'el jefe es simpático',
             en: 'the boss is nice',
@@ -788,11 +825,11 @@ export const course: Unit[] = [
         ],
         sentences: [
           {
-            es: 'el trabajo es difícil',
-            en: 'the work is difficult',
-            enAlt: ['work is difficult', 'the work is hard', 'work is hard', 'the job is difficult', 'the job is hard'],
+            es: 'el español es difícil',
+            en: 'Spanish is difficult',
+            enAlt: ['Spanish is hard'],
           },
-          { es: 'estoy ocupado', en: 'I am busy', enAlt: ["I'm busy"] },
+          { es: 'estoy ocupado', en: 'I am busy', enAlt: ["I'm busy"], esAlt: ['yo estoy ocupado'] },
           {
             es: 'la reunión es importante',
             en: 'the meeting is important',
@@ -823,7 +860,7 @@ export const course: Unit[] = [
           {
             es: 'hoy hace sol',
             en: 'today it is sunny',
-            enAlt: ['it is sunny today', "it's sunny today"],
+            enAlt: ['it is sunny today', "it's sunny today", "today it's sunny"],
             esAlt: ['hace sol hoy'],
           },
           {
@@ -834,7 +871,8 @@ export const course: Unit[] = [
           {
             es: 'hace frío en la noche',
             en: 'it is cold at night',
-            enAlt: ["it's cold at night", 'it is cold in the night'],
+            enAlt: ["it's cold at night", 'it is cold in the night', "it's cold in the night"],
+            esAlt: ['en la noche hace frío'],
           },
         ],
       },
@@ -854,12 +892,13 @@ export const course: Unit[] = [
             es: 'nieva en el invierno',
             en: 'it snows in the winter',
             enAlt: ['it snows in winter'],
+            esAlt: ['nieva en invierno', 'en el invierno nieva'],
           },
           {
             es: 'hace calor en el verano',
             en: 'it is hot in the summer',
             enAlt: ["it's hot in the summer", 'it is hot in summer', "it's hot in summer"],
-            esAlt: ['en el verano hace calor'],
+            esAlt: ['en el verano hace calor', 'hace calor en verano'],
           },
           {
             es: 'la primavera es bonita',
@@ -913,13 +952,20 @@ export const course: Unit[] = [
             es: 'me gusta la música',
             en: 'I like music',
             enAlt: ['I like the music'],
+            esAlt: ['la música me gusta'],
           },
           {
             es: 'bailo y canto',
             en: 'I dance and sing',
             enAlt: ['I dance and I sing'],
+            esAlt: ['yo bailo y canto'],
           },
-          { es: 'me gusta el fútbol', en: 'I like soccer', enAlt: ['I like football'] },
+          {
+            es: 'me gusta el fútbol',
+            en: 'I like soccer',
+            enAlt: ['I like football'],
+            esAlt: ['el fútbol me gusta'],
+          },
         ],
       },
       {
@@ -932,7 +978,7 @@ export const course: Unit[] = [
           { es: 'el restaurante', en: 'the restaurant' },
           { es: 'camino', en: 'I walk' },
           { es: 'la fiesta', en: 'the party' },
-          { es: 'bueno', en: 'good' },
+          { es: 'bueno', en: 'good (quality)' },
         ],
         sentences: [
           {
@@ -1026,15 +1072,22 @@ export const course: Unit[] = [
           { es: 'la salud', en: 'health' },
         ],
         sentences: [
-          { es: 'estoy enfermo', en: 'I am sick', enAlt: ["I'm sick", 'I am ill', "I'm ill"] },
+          {
+            es: 'estoy enfermo',
+            en: 'I am sick',
+            enAlt: ["I'm sick", 'I am ill', "I'm ill"],
+            esAlt: ['yo estoy enfermo'],
+          },
           {
             es: 'me duele la cabeza',
             en: 'my head hurts',
             enAlt: ['I have a headache'],
+            esAlt: ['la cabeza me duele'],
           },
           {
             es: 'necesito la medicina',
             en: 'I need the medicine',
+            enAlt: ['I need medicine'],
             esAlt: ['yo necesito la medicina'],
           },
         ],
@@ -1054,6 +1107,7 @@ export const course: Unit[] = [
           {
             es: 'duermo mucho',
             en: 'I sleep a lot',
+            enAlt: ['I am sleeping a lot', "I'm sleeping a lot"],
             esAlt: ['yo duermo mucho'],
           },
           {
