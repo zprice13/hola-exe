@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - claude/language-learning-app-td5gy9
   workflow_dispatch:
 
 permissions:
