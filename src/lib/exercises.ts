@@ -39,9 +39,10 @@ function wordBankDistractors(answerTokens: string[], count: number): string[] {
   return shuffle([...new Set(pool)]).slice(0, count)
 }
 
-function choiceExercise(item: VocabItem): Exercise {
-  // Alternate direction: recognize Spanish, or produce Spanish
-  const esToEn = Math.random() < 0.5
+function choiceExercise(item: VocabItem, forceRecognition = false): Exercise {
+  // Alternate direction: recognize Spanish, or produce Spanish.
+  // Brand-new words always start with recognition — the gentler direction.
+  const esToEn = forceRecognition || Math.random() < 0.5
   if (esToEn) {
     return {
       type: 'choice',
@@ -93,12 +94,24 @@ function askable(vocab: VocabItem[]): VocabItem[] {
   return vocab.filter((v) => v.es !== v.en)
 }
 
-/** Build a shuffled exercise sequence for one lesson session. */
-export function buildExercises(lesson: Lesson): Exercise[] {
+/** First sentence of the lesson that uses this vocab item, for the intro card. */
+function exampleFor(item: VocabItem, lesson: Lesson): { es: string; en: string } | undefined {
+  const headword = tokenize(item.es).at(-1)
+  if (!headword) return undefined
+  return lesson.sentences.find((s) => tokenize(s.es).includes(headword))
+}
+
+/**
+ * Build a shuffled exercise sequence for one lesson session.
+ * Words the learner has never answered before (no entry in wordStats) are
+ * introduced with a teaching card first, and their first quiz is recognition.
+ */
+export function buildExercises(lesson: Lesson, progress?: Progress): Exercise[] {
   const exercises: Exercise[] = []
   const askableVocab = askable(lesson.vocab)
+  const isNew = (item: VocabItem) => !progress || !progress.wordStats[item.es]
 
-  for (const item of askableVocab) exercises.push(choiceExercise(item))
+  for (const item of askableVocab) exercises.push(choiceExercise(item, isNew(item)))
   for (const sentence of lesson.sentences) exercises.push(wordBankExercise(sentence))
 
   if (lesson.sentences.length > 0) {
@@ -107,13 +120,21 @@ export function buildExercises(lesson: Lesson): Exercise[] {
   }
 
   const shuffled = shuffle(exercises)
-  // Matching makes a good warm-up, so it always leads the session
+  // Matching makes a good warm-up, so it leads the quizzing...
   const matchable = askableVocab.length >= 3 ? askableVocab : lesson.vocab
   shuffled.unshift({
     type: 'match',
     pairs: shuffle(matchable).slice(0, 5),
   })
-  return shuffled
+  // ...but teaching cards for new words come before anything tests them
+  const intros: Exercise[] = askableVocab.filter(isNew).map((item) => ({
+    type: 'intro',
+    es: item.es,
+    en: item.en,
+    speak: item.es,
+    example: exampleFor(item, lesson),
+  }))
+  return [...intros, ...shuffled]
 }
 
 /** Weighted sample without replacement. */
@@ -156,7 +177,7 @@ export function buildPracticeSession(progress: Progress, size = 8): Exercise[] {
   }
 
   const picked = weightedSample(vocab, weightOf, size)
-  const exercises: Exercise[] = picked.map(choiceExercise)
+  const exercises: Exercise[] = picked.map((item) => choiceExercise(item))
 
   const sentences = lessons.flatMap((l) => l.sentences)
   const sentenceWeight = (s: SentenceItem) => {

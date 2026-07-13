@@ -673,6 +673,67 @@ button:disabled {
   transform: translateY(1px);
 }
 
+/* Intro (new word) card */
+
+.intro-card {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.new-chip {
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--accent);
+  border: 1px solid var(--accent-dim);
+  border-radius: 6px;
+  padding: 3px 10px;
+  text-shadow: 0 0 10px var(--accent-glow);
+}
+
+.intro-word-row {
+  margin-bottom: 0;
+}
+
+.intro-es {
+  font-size: 34px;
+  font-weight: 800;
+  color: var(--accent);
+  text-shadow: 0 0 20px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+.intro-en {
+  font-size: 20px;
+  color: var(--text);
+}
+
+.intro-en::before {
+  content: '= ';
+  color: var(--text-light);
+}
+
+.intro-example {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 10px;
+  padding: 14px 18px;
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  font-size: 15px;
+}
+
+.intro-example-es {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.intro-example-en {
+  color: var(--text-light);
+}
+
 /* Choice */
 
 .choice-grid {

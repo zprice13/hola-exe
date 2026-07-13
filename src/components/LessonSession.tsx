@@ -6,6 +6,7 @@ import { ChoiceExercise } from './exercises/ChoiceExercise'
 import { WordBankExercise } from './exercises/WordBankExercise'
 import { MatchExercise } from './exercises/MatchExercise'
 import { TypeExercise } from './exercises/TypeExercise'
+import { IntroCard } from './exercises/IntroCard'
 
 export const XP_PER_EXERCISE = 10
 export const PERFECT_BONUS = 20
@@ -32,7 +33,8 @@ export function LessonSession({
   onWordResult,
 }: Props) {
   const [queue, setQueue] = useState<Exercise[]>(exercises)
-  const [initialLength] = useState(queue.length)
+  // Teaching cards can't be answered, so they don't pay XP
+  const [initialLength] = useState(queue.filter((e) => e.type !== 'intro').length)
   const [position, setPosition] = useState(0)
   const [mistakes, setMistakes] = useState(0)
   const [feedback, setFeedback] = useState<Feedback>(null)
@@ -170,6 +172,9 @@ export function LessonSession({
 
       <main className="lesson-body">
         <div className="lesson-body-inner">
+          {current.type === 'intro' && (
+            <IntroCard es={current.es} en={current.en} example={current.example} />
+          )}
           {current.type === 'choice' && (
             <ChoiceExercise
               prompt={current.prompt}
@@ -211,14 +216,20 @@ export function LessonSession({
       <footer className={`lesson-footer ${feedback ? feedback.status : ''}`}>
         <div className="lesson-footer-inner">
           {feedback === null ? (
-            <button
-              type="button"
-              className="primary-btn"
-              disabled={!canCheck || current.type === 'match'}
-              onClick={check}
-            >
-              {current.type === 'match' ? 'Match all pairs' : 'Check'}
-            </button>
+            current.type === 'intro' ? (
+              <button type="button" className="primary-btn" onClick={advance}>
+                Got it
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="primary-btn"
+                disabled={!canCheck || current.type === 'match'}
+                onClick={check}
+              >
+                {current.type === 'match' ? 'Match all pairs' : 'Check'}
+              </button>
+            )
           ) : (
             <div className="feedback-row">
               <div className="feedback-text" role="status">
