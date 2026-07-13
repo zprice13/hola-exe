@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { Unit } from '../types'
-import { SPEAKER_PITCH, speakSpanish } from '../lib/audio'
+import { speakSpanish } from '../lib/audio'
 import { PORTRAITS } from './portraits'
 
 interface Props {
@@ -19,7 +19,7 @@ export function DialogueScreen({ unit, onDone, onQuit }: Props) {
 
   function speakLine(index: number) {
     const line = lines[index]
-    if (line) speakSpanish(line.es, { pitch: SPEAKER_PITCH[line.speaker] })
+    if (line) speakSpanish(line.es, { speaker: line.speaker })
   }
 
   // Voice each line as it appears, and keep the newest line in view

@@ -30,9 +30,35 @@
   box-sizing: border-box;
 }
 
+/*
+ * Scrolling happens inside #root, not the document — iOS draws a native,
+ * un-hideable scroll indicator on the document scroller, but element
+ * scrollbars can be hidden with CSS.
+ */
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
 body {
   margin: 0;
-  min-height: 100vh;
+}
+
+#root {
+  height: 100dvh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+* {
+  scrollbar-width: none;
+}
+
+*::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
 }
 
 /* Faint CRT scanlines over everything, purely decorative */
@@ -535,7 +561,7 @@ button:disabled {
 .lesson-screen {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .lesson-header-inner,
@@ -1144,7 +1170,7 @@ button:disabled {
 /* ---------- Completion / out of hearts ---------- */
 
 .complete-screen {
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
