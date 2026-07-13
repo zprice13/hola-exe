@@ -28,6 +28,7 @@ function freshProgress(): Progress {
     lastActiveDate: null,
     lastHeartRefill: todayISO(),
     completedLessons: {},
+    wordStats: {},
   }
 }
 
@@ -50,6 +51,17 @@ export function sanitizeProgress(raw: unknown): Progress {
     }
   }
 
+  const wordStats: Progress['wordStats'] = {}
+  if (typeof r.wordStats === 'object' && r.wordStats !== null) {
+    for (const [key, value] of Object.entries(r.wordStats as Record<string, unknown>)) {
+      if (typeof value !== 'object' || value === null) continue
+      const v = value as Record<string, unknown>
+      const seen = num(v.seen, 0)
+      const missed = num(v.missed, 0)
+      if (seen > 0 || missed > 0) wordStats[key] = { seen, missed }
+    }
+  }
+
   return {
     xp: num(r.xp, 0),
     hearts: Math.min(MAX_HEARTS, num(r.hearts, MAX_HEARTS)),
@@ -57,6 +69,7 @@ export function sanitizeProgress(raw: unknown): Progress {
     lastActiveDate: dateStr(r.lastActiveDate),
     lastHeartRefill: dateStr(r.lastHeartRefill),
     completedLessons,
+    wordStats,
   }
 }
 
@@ -107,7 +120,7 @@ export function useProgress() {
     setProgress((p) => ({ ...p, hearts: Math.max(0, p.hearts - 1) }))
   }, [])
 
-  const completeLesson = useCallback((lessonId: string, xpEarned: number) => {
+  const completeLesson = useCallback((lessonId: string | null, xpEarned: number) => {
     setProgress((p) => {
       const today = todayISO()
       const streak =
@@ -118,9 +131,23 @@ export function useProgress() {
         hearts: Math.min(MAX_HEARTS, p.hearts + 1),
         streak,
         lastActiveDate: today,
-        completedLessons: {
-          ...p.completedLessons,
-          [lessonId]: (p.completedLessons[lessonId] ?? 0) + 1,
+        // Practice sessions (lessonId null) earn XP/streak but no crowns
+        completedLessons:
+          lessonId === null
+            ? p.completedLessons
+            : { ...p.completedLessons, [lessonId]: (p.completedLessons[lessonId] ?? 0) + 1 },
+      }
+    })
+  }, [])
+
+  const recordWordResult = useCallback((key: string, correct: boolean) => {
+    setProgress((p) => {
+      const prev = p.wordStats[key] ?? { seen: 0, missed: 0 }
+      return {
+        ...p,
+        wordStats: {
+          ...p.wordStats,
+          [key]: { seen: prev.seen + 1, missed: prev.missed + (correct ? 0 : 1) },
         },
       }
     })
@@ -135,7 +162,7 @@ export function useProgress() {
     setProgress(next)
   }, [])
 
-  return { progress, loseHeart, completeLesson, refillHearts, replaceProgress }
+  return { progress, loseHeart, completeLesson, refillHearts, replaceProgress, recordWordResult }
 }
 
 /** A lesson is unlocked when every lesson before it has been completed at least once. */

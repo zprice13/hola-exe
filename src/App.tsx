@@ -1,5 +1,7 @@
 import { useState } from 'react'
+import type { Exercise } from './types'
 import { findLesson } from './data/course'
+import { buildExercises, buildPracticeSession } from './lib/exercises'
 import { useProgress } from './lib/progress'
 import { Home } from './components/Home'
 import { LessonSession } from './components/LessonSession'
@@ -9,21 +11,37 @@ import { SaveModal } from './components/SaveModal'
 
 type Screen =
   | { name: 'home' }
-  | { name: 'lesson'; lessonId: string }
+  | { name: 'session'; lessonId: string | null; exercises: Exercise[] }
   | { name: 'complete'; xpEarned: number; mistakes: number }
   | { name: 'outOfHearts' }
 
 export default function App() {
-  const { progress, loseHeart, completeLesson, refillHearts, replaceProgress } = useProgress()
+  const { progress, loseHeart, completeLesson, refillHearts, replaceProgress, recordWordResult } =
+    useProgress()
   const [screen, setScreen] = useState<Screen>({ name: 'home' })
   const [booting, setBooting] = useState(
     () => !window.matchMedia('(prefers-reduced-motion: reduce)').matches,
   )
   const [showSave, setShowSave] = useState(false)
 
-  // Starting a lesson with no hearts would dead-end at the first mistake
-  const startLesson = (lessonId: string) =>
-    setScreen(progress.hearts > 0 ? { name: 'lesson', lessonId } : { name: 'outOfHearts' })
+  // Starting a session with no hearts would dead-end at the first mistake
+  const startLesson = (lessonId: string) => {
+    if (progress.hearts <= 0) {
+      setScreen({ name: 'outOfHearts' })
+      return
+    }
+    const found = findLesson(lessonId)
+    if (found) setScreen({ name: 'session', lessonId, exercises: buildExercises(found.lesson) })
+  }
+
+  const startPractice = () => {
+    if (progress.hearts <= 0) {
+      setScreen({ name: 'outOfHearts' })
+      return
+    }
+    const exercises = buildPracticeSession(progress)
+    if (exercises.length > 0) setScreen({ name: 'session', lessonId: null, exercises })
+  }
 
   const overlays = (
     <>
@@ -34,26 +52,25 @@ export default function App() {
     </>
   )
 
-  if (screen.name === 'lesson') {
-    const found = findLesson(screen.lessonId)
-    if (found) {
-      return (
-        <>
-          <LessonSession
-            lesson={found.lesson}
-            hearts={progress.hearts}
-            onLoseHeart={loseHeart}
-            onComplete={(xpEarned, mistakes) => {
-              completeLesson(screen.lessonId, xpEarned)
-              setScreen({ name: 'complete', xpEarned, mistakes })
-            }}
-            onQuit={() => setScreen({ name: 'home' })}
-            onOutOfHearts={() => setScreen({ name: 'outOfHearts' })}
-          />
-          {overlays}
-        </>
-      )
-    }
+  if (screen.name === 'session') {
+    return (
+      <>
+        <LessonSession
+          key={screen.lessonId ?? 'practice'}
+          exercises={screen.exercises}
+          hearts={progress.hearts}
+          onLoseHeart={loseHeart}
+          onWordResult={recordWordResult}
+          onComplete={(xpEarned, mistakes) => {
+            completeLesson(screen.lessonId, xpEarned)
+            setScreen({ name: 'complete', xpEarned, mistakes })
+          }}
+          onQuit={() => setScreen({ name: 'home' })}
+          onOutOfHearts={() => setScreen({ name: 'outOfHearts' })}
+        />
+        {overlays}
+      </>
+    )
   }
 
   if (screen.name === 'complete') {
@@ -96,9 +113,17 @@ export default function App() {
     )
   }
 
+  const practiceReady = Object.values(progress.completedLessons).some((n) => n > 0)
+
   return (
     <>
-      <Home progress={progress} onStartLesson={startLesson} onOpenSave={() => setShowSave(true)} />
+      <Home
+        progress={progress}
+        onStartLesson={startLesson}
+        onOpenSave={() => setShowSave(true)}
+        onPractice={startPractice}
+        practiceReady={practiceReady}
+      />
       {overlays}
     </>
   )

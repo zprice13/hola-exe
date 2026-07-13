@@ -7,9 +7,11 @@ interface Props {
   progress: Progress
   onStartLesson: (lessonId: string) => void
   onOpenSave: () => void
+  onPractice: () => void
+  practiceReady: boolean
 }
 
-export function Home({ progress, onStartLesson, onOpenSave }: Props) {
+export function Home({ progress, onStartLesson, onOpenSave, onPractice, practiceReady }: Props) {
   return (
     <div className="home">
       <header className="stats-bar">
@@ -31,6 +33,19 @@ export function Home({ progress, onStartLesson, onOpenSave }: Props) {
         <span className="title-prompt">&gt; </span>hola.exe<span className="cursor">_</span>
       </h1>
       <p className="app-subtitle">// select a lesson to begin transmission</p>
+
+      <button
+        type="button"
+        className="ghost-btn practice-btn"
+        disabled={!practiceReady}
+        onClick={onPractice}
+        title={practiceReady ? 'Re-drill your weakest words' : 'Complete a lesson first'}
+      >
+        ▶ PRACTICE.BIN
+      </button>
+      <p className="practice-hint">
+        {practiceReady ? '// re-drill your weakest words' : '// complete a lesson to unlock practice'}
+      </p>
 
       <div className="units">
         {course.map((unit, unitIndex) => (

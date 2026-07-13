@@ -1,4 +1,4 @@
-import type { Exercise, Lesson, VocabItem } from '../types'
+import type { Exercise, Lesson, Progress, SentenceItem, VocabItem } from '../types'
 import { course } from '../data/course'
 
 export function shuffle<T>(items: T[]): T[] {
@@ -22,7 +22,7 @@ function pickDistractors(correct: VocabItem, lang: 'es' | 'en', count: number): 
 function tokenize(sentence: string): string[] {
   return sentence
     .split(/\s+/)
-    .map((t) => t.replace(/^[,.!?¿¡]+|[,.!?¿¡]+$/g, ''))
+    .map((t) => t.replace(/^[,.!?¿¡—]+|[,.!?¿¡—]+$/g, ''))
     .filter(Boolean)
 }
 
@@ -39,58 +39,71 @@ function wordBankDistractors(answerTokens: string[], count: number): string[] {
   return shuffle([...new Set(pool)]).slice(0, count)
 }
 
+function choiceExercise(item: VocabItem): Exercise {
+  // Alternate direction: recognize Spanish, or produce Spanish
+  const esToEn = Math.random() < 0.5
+  if (esToEn) {
+    return {
+      type: 'choice',
+      prompt: item.es,
+      promptLang: 'es',
+      correct: item.en,
+      options: shuffle([item.en, ...pickDistractors(item, 'en', 3)]),
+      speak: item.es,
+      key: item.es,
+    }
+  }
+  return {
+    type: 'choice',
+    prompt: item.en,
+    promptLang: 'en',
+    correct: item.es,
+    options: shuffle([item.es, ...pickDistractors(item, 'es', 3)]),
+    key: item.es,
+  }
+}
+
+function wordBankExercise(sentence: SentenceItem): Exercise {
+  const answerTokens = tokenize(sentence.es)
+  return {
+    type: 'wordBank',
+    prompt: sentence.en,
+    answerTokens,
+    bankTokens: shuffle([...answerTokens, ...wordBankDistractors(answerTokens, 3)]),
+    accept: [answerTokens.join(' '), ...(sentence.esAlt ?? [])],
+    display: sentence.es,
+    speak: sentence.es,
+    key: sentence.es,
+  }
+}
+
+function typeExercise(sentence: SentenceItem): Exercise {
+  return {
+    type: 'type',
+    prompt: sentence.es,
+    answers: [sentence.en, ...(sentence.enAlt ?? [])],
+    speak: sentence.es,
+    key: sentence.es,
+  }
+}
+
+/** Items whose Spanish and English are identical (e.g. "no") carry zero
+ *  information as recognition exercises, so they only appear inside sentences. */
+function askable(vocab: VocabItem[]): VocabItem[] {
+  return vocab.filter((v) => v.es !== v.en)
+}
+
 /** Build a shuffled exercise sequence for one lesson session. */
 export function buildExercises(lesson: Lesson): Exercise[] {
   const exercises: Exercise[] = []
+  const askableVocab = askable(lesson.vocab)
 
-  // Items whose Spanish and English are identical (e.g. "no") carry zero
-  // information as recognition exercises, so they only appear inside sentences.
-  const askableVocab = lesson.vocab.filter((v) => v.es !== v.en)
-
-  for (const item of askableVocab) {
-    // Alternate direction: recognize Spanish, then produce Spanish
-    const esToEn = Math.random() < 0.5
-    if (esToEn) {
-      exercises.push({
-        type: 'choice',
-        prompt: item.es,
-        promptLang: 'es',
-        correct: item.en,
-        options: shuffle([item.en, ...pickDistractors(item, 'en', 3)]),
-        speak: item.es,
-      })
-    } else {
-      exercises.push({
-        type: 'choice',
-        prompt: item.en,
-        promptLang: 'en',
-        correct: item.es,
-        options: shuffle([item.es, ...pickDistractors(item, 'es', 3)]),
-      })
-    }
-  }
-
-  for (const sentence of lesson.sentences) {
-    const answerTokens = tokenize(sentence.es)
-    exercises.push({
-      type: 'wordBank',
-      prompt: sentence.en,
-      answerTokens,
-      bankTokens: shuffle([...answerTokens, ...wordBankDistractors(answerTokens, 3)]),
-      accept: [answerTokens.join(' '), ...(sentence.esAlt ?? [])],
-      display: sentence.es,
-      speak: sentence.es,
-    })
-  }
+  for (const item of askableVocab) exercises.push(choiceExercise(item))
+  for (const sentence of lesson.sentences) exercises.push(wordBankExercise(sentence))
 
   if (lesson.sentences.length > 0) {
     const target = lesson.sentences[Math.floor(Math.random() * lesson.sentences.length)]
-    exercises.push({
-      type: 'type',
-      prompt: target.es,
-      answers: [target.en, ...(target.enAlt ?? [])],
-      speak: target.es,
-    })
+    exercises.push(typeExercise(target))
   }
 
   const shuffled = shuffle(exercises)
@@ -99,6 +112,65 @@ export function buildExercises(lesson: Lesson): Exercise[] {
   shuffled.unshift({
     type: 'match',
     pairs: shuffle(matchable).slice(0, 5),
+  })
+  return shuffled
+}
+
+/** Weighted sample without replacement. */
+function weightedSample<T>(items: T[], weightOf: (item: T) => number, count: number): T[] {
+  const pool = [...items]
+  const picked: T[] = []
+  while (picked.length < count && pool.length > 0) {
+    const weights = pool.map(weightOf)
+    const total = weights.reduce((a, b) => a + b, 0)
+    let roll = Math.random() * total
+    let index = 0
+    for (; index < pool.length - 1; index++) {
+      roll -= weights[index]
+      if (roll <= 0) break
+    }
+    picked.push(pool.splice(index, 1)[0])
+  }
+  return picked
+}
+
+/**
+ * Build a practice session from completed lessons, weighted toward words the
+ * learner has missed most (and words never drilled). Returns [] if nothing is
+ * completed yet.
+ */
+export function buildPracticeSession(progress: Progress, size = 8): Exercise[] {
+  const done = new Set(
+    Object.entries(progress.completedLessons)
+      .filter(([, n]) => n > 0)
+      .map(([id]) => id),
+  )
+  const lessons = course.flatMap((u) => u.lessons).filter((l) => done.has(l.id))
+  const vocab = askable(lessons.flatMap((l) => l.vocab))
+  if (vocab.length === 0) return []
+
+  const weightOf = (item: VocabItem) => {
+    const stats = progress.wordStats[item.es]
+    if (!stats) return 3 // never drilled — prime practice material
+    return Math.max(0.5, 1 + stats.missed * 3 - stats.seen * 0.2)
+  }
+
+  const picked = weightedSample(vocab, weightOf, size)
+  const exercises: Exercise[] = picked.map(choiceExercise)
+
+  const sentences = lessons.flatMap((l) => l.sentences)
+  const sentenceWeight = (s: SentenceItem) => {
+    const stats = progress.wordStats[s.es]
+    return stats ? Math.max(0.5, 1 + stats.missed * 3 - stats.seen * 0.2) : 2
+  }
+  for (const sentence of weightedSample(sentences, sentenceWeight, 2)) {
+    exercises.push(wordBankExercise(sentence))
+  }
+
+  const shuffled = shuffle(exercises)
+  shuffled.unshift({
+    type: 'match',
+    pairs: shuffle(picked).slice(0, Math.min(5, picked.length)),
   })
   return shuffled
 }

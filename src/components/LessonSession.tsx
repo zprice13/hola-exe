@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
-import type { Exercise, Lesson } from '../types'
-import { anyAnswerMatches, buildExercises } from '../lib/exercises'
+import type { Exercise } from '../types'
+import { anyAnswerMatches } from '../lib/exercises'
 import { speakSpanish } from '../lib/audio'
 import { ChoiceExercise } from './exercises/ChoiceExercise'
 import { WordBankExercise } from './exercises/WordBankExercise'
@@ -11,18 +11,27 @@ export const XP_PER_EXERCISE = 10
 export const PERFECT_BONUS = 20
 
 interface Props {
-  lesson: Lesson
+  exercises: Exercise[]
   hearts: number
   onLoseHeart: () => void
   onComplete: (xpEarned: number, mistakes: number) => void
   onQuit: () => void
   onOutOfHearts: () => void
+  onWordResult?: (key: string, correct: boolean) => void
 }
 
 type Feedback = { status: 'correct' } | { status: 'incorrect'; correctAnswer: string } | null
 
-export function LessonSession({ lesson, hearts, onLoseHeart, onComplete, onQuit, onOutOfHearts }: Props) {
-  const [queue, setQueue] = useState<Exercise[]>(() => buildExercises(lesson))
+export function LessonSession({
+  exercises,
+  hearts,
+  onLoseHeart,
+  onComplete,
+  onQuit,
+  onOutOfHearts,
+  onWordResult,
+}: Props) {
+  const [queue, setQueue] = useState<Exercise[]>(exercises)
   const [initialLength] = useState(queue.length)
   const [position, setPosition] = useState(0)
   const [mistakes, setMistakes] = useState(0)
@@ -69,12 +78,20 @@ export function LessonSession({ lesson, hearts, onLoseHeart, onComplete, onQuit,
     setQueue((q) => [...q, current])
   }
 
+  function report(correct: boolean) {
+    if (current && 'key' in current && current.key && onWordResult) {
+      onWordResult(current.key, correct)
+    }
+  }
+
   function check() {
     if (!current || feedback) return
     switch (current.type) {
       case 'choice': {
         if (!choiceSelected) return
-        if (choiceSelected === current.correct) {
+        const correct = choiceSelected === current.correct
+        report(correct)
+        if (correct) {
           setFeedback({ status: 'correct' })
         } else {
           handleWrong(current.correct)
@@ -83,7 +100,9 @@ export function LessonSession({ lesson, hearts, onLoseHeart, onComplete, onQuit,
       }
       case 'wordBank': {
         const attempt = pickedTokens.map((i) => current.bankTokens[i]).join(' ')
-        if (anyAnswerMatches(current.accept, attempt)) {
+        const correct = anyAnswerMatches(current.accept, attempt)
+        report(correct)
+        if (correct) {
           if (current.speak) speakSpanish(current.speak)
           setFeedback({ status: 'correct' })
         } else {
@@ -93,7 +112,9 @@ export function LessonSession({ lesson, hearts, onLoseHeart, onComplete, onQuit,
       }
       case 'type': {
         if (!typedAnswer.trim()) return
-        if (anyAnswerMatches(current.answers, typedAnswer)) {
+        const correct = anyAnswerMatches(current.answers, typedAnswer)
+        report(correct)
+        if (correct) {
           setFeedback({ status: 'correct' })
         } else {
           handleWrong(current.answers[0])
