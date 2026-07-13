@@ -1,16 +1,21 @@
 import type { Progress } from '../types'
 import { course } from '../data/course'
 import { isLessonUnlocked } from '../lib/progress'
+import { FloppyIcon } from './SaveModal'
 
 interface Props {
   progress: Progress
   onStartLesson: (lessonId: string) => void
+  onOpenSave: () => void
 }
 
-export function Home({ progress, onStartLesson }: Props) {
+export function Home({ progress, onStartLesson, onOpenSave }: Props) {
   return (
     <div className="home">
       <header className="stats-bar">
+        <button type="button" className="stat save-chip" onClick={onOpenSave} aria-label="Save and load progress">
+          <FloppyIcon size={15} /> save
+        </button>
         <span className="stat" role="img" aria-label={`${progress.streak} day streak`} title="Day streak">
           <span className="stat-key">streak</span> {progress.streak}
         </span>
