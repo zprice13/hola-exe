@@ -17,6 +17,8 @@ export interface Lesson {
   title: string
   vocab: VocabItem[]
   sentences: SentenceItem[]
+  /** Infinitives (keys into CONJUGATIONS) this lesson formally introduces */
+  conjugates?: string[]
 }
 
 export interface DialogueLine {
@@ -43,6 +45,13 @@ export type Exercise =
       en: string
       speak: string
       example?: { es: string; en: string }
+    }
+  | {
+      /** Verb-table teaching card: all present-tense forms at once */
+      type: 'conjugation'
+      verb: string
+      translation: string
+      forms: { pronoun: string; es: string; en: string }[]
     }
   | {
       type: 'choice'

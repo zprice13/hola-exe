@@ -134,6 +134,7 @@ export const course: Unit[] = [
       {
         id: 'people-1',
         title: 'Pronouns',
+        conjugates: ['ser'],
         vocab: [
           { es: 'yo', en: 'I' },
           { es: 'tú', en: 'you' },
@@ -231,6 +232,7 @@ export const course: Unit[] = [
       {
         id: 'food-1',
         title: 'At the table',
+        conjugates: ['comer', 'beber'],
         vocab: [
           { es: 'el agua', en: 'the water' },
           { es: 'el pan', en: 'the bread' },
@@ -338,6 +340,7 @@ export const course: Unit[] = [
       {
         id: 'travel-1',
         title: 'Places',
+        conjugates: ['estar', 'ir'],
         vocab: [
           { es: 'el hotel', en: 'the hotel' },
           { es: 'la playa', en: 'the beach' },
@@ -442,6 +445,7 @@ export const course: Unit[] = [
       {
         id: 'numbers-1',
         title: 'One to five',
+        conjugates: ['tener'],
         vocab: [
           { es: 'uno', en: 'one' },
           { es: 'dos', en: 'two' },

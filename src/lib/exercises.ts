@@ -1,5 +1,6 @@
 import type { Exercise, Lesson, Progress, SentenceItem, VocabItem } from '../types'
 import { course } from '../data/course'
+import { CONJUGATIONS } from '../data/conjugations'
 
 export function shuffle<T>(items: T[]): T[] {
   const arr = [...items]
@@ -101,18 +102,36 @@ function exampleFor(item: VocabItem, lesson: Lesson): { es: string; en: string }
   return lesson.sentences.find((s) => tokenize(s.es).includes(headword))
 }
 
+/** Pronoun→form quiz for a conjugated verb: "he / she drinks" → bebe. */
+function conjugationQuiz(verb: string): Exercise {
+  const { forms } = CONJUGATIONS[verb]
+  const target = forms[Math.floor(Math.random() * forms.length)]
+  return {
+    type: 'choice',
+    prompt: target.en,
+    promptLang: 'en',
+    correct: target.es,
+    options: shuffle(forms.map((f) => f.es)),
+    key: `conj:${verb}`,
+  }
+}
+
 /**
  * Build a shuffled exercise sequence for one lesson session.
  * Words the learner has never answered before (no entry in wordStats) are
  * introduced with a teaching card first, and their first quiz is recognition.
+ * Verbs the lesson formally introduces get a conjugation table on first play
+ * and a pronoun→form quiz every session.
  */
 export function buildExercises(lesson: Lesson, progress?: Progress): Exercise[] {
   const exercises: Exercise[] = []
   const askableVocab = askable(lesson.vocab)
   const isNew = (item: VocabItem) => !progress || !progress.wordStats[item.es]
+  const conjugates = (lesson.conjugates ?? []).filter((v) => CONJUGATIONS[v])
 
   for (const item of askableVocab) exercises.push(choiceExercise(item, isNew(item)))
   for (const sentence of lesson.sentences) exercises.push(wordBankExercise(sentence))
+  for (const verb of conjugates) exercises.push(conjugationQuiz(verb))
 
   if (lesson.sentences.length > 0) {
     const target = lesson.sentences[Math.floor(Math.random() * lesson.sentences.length)]
@@ -126,7 +145,17 @@ export function buildExercises(lesson: Lesson, progress?: Progress): Exercise[] 
     type: 'match',
     pairs: shuffle(matchable).slice(0, 5),
   })
-  // ...but teaching cards for new words come before anything tests them
+  // ...but teaching material comes before anything tests it: word cards for
+  // unseen vocab, then verb tables on the lesson's first play
+  const firstPlay = !progress || (progress.completedLessons[lesson.id] ?? 0) === 0
+  const tables: Exercise[] = firstPlay
+    ? conjugates.map((verb) => ({
+        type: 'conjugation',
+        verb,
+        translation: CONJUGATIONS[verb].translation,
+        forms: CONJUGATIONS[verb].forms,
+      }))
+    : []
   const intros: Exercise[] = askableVocab.filter(isNew).map((item) => ({
     type: 'intro',
     es: item.es,
@@ -134,7 +163,7 @@ export function buildExercises(lesson: Lesson, progress?: Progress): Exercise[] 
     speak: item.es,
     example: exampleFor(item, lesson),
   }))
-  return [...intros, ...shuffled]
+  return [...intros, ...tables, ...shuffled]
 }
 
 /** Weighted sample without replacement. */

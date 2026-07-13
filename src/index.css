@@ -46,7 +46,9 @@ body {
 }
 
 #root {
-  height: 100dvh;
+  /* percentage chain, not dvh: iOS standalone under-reports dvh after
+     keyboard use, leaving dead space at the bottom of the screen */
+  height: 100%;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
@@ -573,7 +575,7 @@ button:disabled {
 .lesson-screen {
   display: flex;
   flex-direction: column;
-  min-height: 100dvh;
+  min-height: 100%;
 }
 
 .lesson-header-inner,
@@ -937,6 +939,57 @@ button:disabled {
   color: var(--text-light);
 }
 
+/* Conjugation table card */
+
+.conj-table {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: min(360px, 100%);
+  margin-top: 8px;
+}
+
+.conj-row {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 1.4fr;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 15px;
+  text-align: left;
+  transition: border-color 0.12s, box-shadow 0.12s;
+}
+
+.conj-row:hover {
+  border-color: var(--accent-dim);
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
+.conj-pronoun {
+  color: var(--text-light);
+}
+
+.conj-es {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.conj-en {
+  color: var(--text-light);
+  font-size: 13px;
+  text-align: right;
+}
+
+.conj-hint {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--text-light);
+}
+
 /* Choice */
 
 .choice-grid {
@@ -1211,7 +1264,7 @@ button:disabled {
 /* ---------- Completion / out of hearts ---------- */
 
 .complete-screen {
-  min-height: 100dvh;
+  min-height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
