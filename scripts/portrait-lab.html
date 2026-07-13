@@ -1,0 +1,196 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  body {
+    margin: 0; background: #060a07; color: #d7e8d8;
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    padding: 24px;
+  }
+  h1 { font-size: 18px; color: #33ff66; letter-spacing: 2px; }
+  h2 {
+    font-size: 13px; letter-spacing: 2px; color: #7d947f;
+    border-top: 1px solid #1e2b20; padding-top: 14px; margin-top: 30px;
+  }
+  .row { display: flex; gap: 46px; flex-wrap: wrap; align-items: flex-end; }
+  .cell { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+  pre { margin: 0; white-space: pre; }
+  .rosana pre, .rosana .nm { color: #33ff66; text-shadow: 0 0 10px rgba(51,255,102,.22); }
+  .leo pre, .leo .nm { color: #00e5ff; text-shadow: 0 0 10px rgba(0,229,255,.2); }
+  .nm { font-size: 11px; letter-spacing: 3px; }
+  .meta { font-size: 10px; color: #7d947f; }
+  /* hidden svg sources */
+  #sources { position: absolute; left: -9999px; top: 0; }
+</style>
+</head>
+<body>
+<h1>&gt; ASCII_STYLE_LAB.TXT</h1>
+<div id="out">rendering…</div>
+
+<div id="sources">
+  <!-- ROSANA: long wavy hair, earrings, soft face -->
+  <svg id="src-rosana" width="360" height="400" xmlns="http://www.w3.org/2000/svg">
+    <rect width="360" height="400" fill="#000"/>
+    <!-- hair mass -->
+    <path d="M60 150 Q55 40 180 38 Q305 40 300 150 L305 330 Q290 355 260 350 L250 210 Q248 130 180 128 Q112 130 110 210 L100 350 Q70 355 55 330 Z" fill="#909090"/>
+    <!-- hair highlights -->
+    <path d="M80 120 Q90 60 175 55" stroke="#c8c8c8" stroke-width="7" fill="none"/>
+    <path d="M285 130 Q275 70 195 58" stroke="#5a5a5a" stroke-width="7" fill="none"/>
+    <!-- neck -->
+    <rect x="158" y="290" width="44" height="46" fill="#c9c9c9"/>
+    <!-- face -->
+    <ellipse cx="180" cy="210" rx="72" ry="86" fill="#e8e8e8"/>
+    <!-- brows -->
+    <path d="M138 182 Q152 172 168 180" stroke="#444" stroke-width="4" fill="none"/>
+    <path d="M192 180 Q208 172 222 182" stroke="#444" stroke-width="4" fill="none"/>
+    <!-- eyes -->
+    <circle cx="152" cy="204" r="6" fill="#222"/>
+    <circle cx="208" cy="204" r="6" fill="#222"/>
+    <!-- nose -->
+    <path d="M180 210 L174 236 L186 236" stroke="#777" stroke-width="4" fill="none"/>
+    <!-- lips -->
+    <path d="M158 258 Q180 270 202 258" stroke="#7a7a7a" stroke-width="5" fill="none"/>
+    <!-- earrings -->
+    <circle cx="100" cy="262" r="8" fill="#fff"/>
+    <circle cx="260" cy="262" r="8" fill="#fff"/>
+    <!-- shoulders / top -->
+    <path d="M60 400 Q70 330 130 322 L180 340 L230 322 Q290 330 300 400 Z" fill="#6f6f6f"/>
+  </svg>
+
+  <!-- LEO: spiky hair, rectangular glasses, collar -->
+  <svg id="src-leo" width="360" height="400" xmlns="http://www.w3.org/2000/svg">
+    <rect width="360" height="400" fill="#000"/>
+    <!-- spiky hair -->
+    <path d="M95 120 L110 62 L130 105 L150 52 L170 100 L192 50 L212 100 L232 58 L250 105 L266 70 L272 125 Q272 90 180 88 Q95 90 95 120 Z" fill="#a8a8a8"/>
+    <path d="M95 125 Q95 95 180 92 Q268 95 268 125 L268 150 L95 150 Z" fill="#a0a0a0"/>
+    <!-- ears -->
+    <ellipse cx="102" cy="220" rx="12" ry="20" fill="#cfcfcf"/>
+    <ellipse cx="258" cy="220" rx="12" ry="20" fill="#cfcfcf"/>
+    <!-- neck -->
+    <rect x="156" y="290" width="48" height="44" fill="#c2c2c2"/>
+    <!-- face: squarer jaw -->
+    <path d="M108 165 Q108 118 180 116 Q252 118 252 165 L250 250 Q248 296 180 302 Q112 296 110 250 Z" fill="#d8d8d8"/>
+    <!-- glasses -->
+    <rect x="122" y="186" width="54" height="38" rx="5" fill="#f2f2f2" stroke="#000" stroke-width="11"/>
+    <rect x="184" y="186" width="54" height="38" rx="5" fill="#f2f2f2" stroke="#000" stroke-width="11"/>
+    <line x1="176" y1="203" x2="184" y2="203" stroke="#000" stroke-width="9"/>
+    <!-- pupils -->
+    <circle cx="149" cy="205" r="5" fill="#222"/>
+    <circle cx="211" cy="205" r="5" fill="#222"/>
+    <!-- nose -->
+    <path d="M180 214 L176 240 L188 240" stroke="#707070" stroke-width="4" fill="none"/>
+    <!-- mouth -->
+    <path d="M160 266 Q180 276 200 266" stroke="#666" stroke-width="5" fill="none"/>
+    <!-- stubble -->
+    <path d="M126 250 Q180 310 234 250 L232 270 Q180 322 128 270 Z" fill="#b5b5b5" opacity="0.3"/>
+    <!-- shoulders / collar -->
+    <path d="M56 400 Q70 328 132 320 L160 336 L180 322 L200 336 L228 320 Q290 328 304 400 Z" fill="#606060"/>
+    <path d="M160 336 L180 322 L200 336 L192 358 L168 358 Z" fill="#e8e8e8"/>
+  </svg>
+</div>
+
+<script>
+const STYLES = [
+  { key: 'halftone',  label: 'HALFTONE — classic dither ramp',      ramp: ' .:-=+*#%@',            gamma: 1.0 },
+  { key: 'currency',  label: 'TERMINAL DUMP — $#+ ramp, hard steps', ramp: ' .+*#$@',               gamma: 1.15 },
+  { key: 'typewriter',label: 'TYPEWRITER — dots & ticks, airy',      ramp: ' .,:;!()|/#',           gamma: 0.8 },
+  { key: 'blocks',    label: 'CRT BLOCKS — ░▒▓█ shading',            ramp: ' ░▒▓█',                 gamma: 1.0 },
+]
+const CHARS = ['rosana', 'leo']
+const MAIN_COLS = 44
+const SIZES = [30, 44, 60]
+
+function toAscii(imageData, cols, ramp, gamma) {
+  const { width, height, data } = imageData
+  const cellW = width / cols
+  const cellH = cellW * 2.05 // account for character aspect
+  const rows = Math.floor(height / cellH)
+  let out = ''
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      // average brightness of the cell
+      let sum = 0, n = 0
+      const x0 = Math.floor(c * cellW), x1 = Math.min(width, Math.ceil((c + 1) * cellW))
+      const y0 = Math.floor(r * cellH), y1 = Math.min(height, Math.ceil((r + 1) * cellH))
+      for (let y = y0; y < y1; y += 2) {
+        for (let x = x0; x < x1; x += 2) {
+          const i = (y * width + x) * 4
+          sum += 0.2126 * data[i] + 0.7152 * data[i + 1] + 0.0722 * data[i + 2]
+          n++
+        }
+      }
+      const lum = Math.pow(sum / n / 255, gamma)
+      const idx = Math.min(ramp.length - 1, Math.round(lum * (ramp.length - 1)))
+      out += ramp[idx]
+    }
+    out += '\n'
+  }
+  return out
+}
+
+async function svgToImageData(svgEl) {
+  const xml = new XMLSerializer().serializeToString(svgEl)
+  const img = new Image()
+  img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(xml)))
+  await new Promise((res) => { img.onload = res })
+  const canvas = document.createElement('canvas')
+  canvas.width = svgEl.width.baseVal.value
+  canvas.height = svgEl.height.baseVal.value
+  const ctx = canvas.getContext('2d')
+  ctx.drawImage(img, 0, 0)
+  return ctx.getImageData(0, 0, canvas.width, canvas.height)
+}
+
+async function main() {
+  const imgs = {}
+  for (const c of CHARS) imgs[c] = await svgToImageData(document.getElementById('src-' + c))
+  const out = document.getElementById('out')
+  out.innerHTML = ''
+
+  for (const style of STYLES) {
+    const h = document.createElement('h2')
+    h.textContent = `STYLE: ${style.label}`
+    out.appendChild(h)
+    const row = document.createElement('div')
+    row.className = 'row'
+    for (const c of CHARS) {
+      const cell = document.createElement('div')
+      cell.className = 'cell ' + c
+      const pre = document.createElement('pre')
+      pre.style.fontSize = '9px'
+      pre.style.lineHeight = '1.0'
+      pre.textContent = toAscii(imgs[c], MAIN_COLS, style.ramp, style.gamma)
+      const nm = document.createElement('span'); nm.className = 'nm'; nm.textContent = c.toUpperCase()
+      const meta = document.createElement('span'); meta.className = 'meta'; meta.textContent = `${MAIN_COLS} cols`
+      cell.append(pre, nm, meta)
+      row.appendChild(cell)
+    }
+    out.appendChild(row)
+  }
+
+  // resolution ladder for the halftone style, Rosana only
+  const h = document.createElement('h2')
+  h.textContent = 'RESOLUTION LADDER (halftone, Rosana): complexity vs size'
+  out.appendChild(h)
+  const row = document.createElement('div')
+  row.className = 'row'
+  for (const cols of SIZES) {
+    const cell = document.createElement('div')
+    cell.className = 'cell rosana'
+    const pre = document.createElement('pre')
+    pre.style.fontSize = cols > 50 ? '7px' : '9px'
+    pre.style.lineHeight = '1.0'
+    pre.textContent = toAscii(imgs.rosana, cols, STYLES[0].ramp, STYLES[0].gamma)
+    const meta = document.createElement('span'); meta.className = 'meta'
+    meta.textContent = `${cols} cols ≈ ${cols * Math.floor(400 / (360 / cols) / 2.05)} chars`
+    cell.append(pre, meta)
+    row.appendChild(cell)
+  }
+  out.appendChild(row)
+  document.title = 'READY'
+}
+main()
+</script>
+</body>
+</html>
