@@ -468,8 +468,15 @@ button:disabled {
   font-size: 14px;
 }
 
-.practice-btn {
+.home-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
   margin-top: -20px;
+}
+
+.practice-btn {
+  margin-top: 0;
 }
 
 .practice-btn:disabled {
@@ -986,6 +993,45 @@ button:disabled {
 
 .conj-hint {
   margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--text-light);
+}
+
+/* Verb reference screen */
+
+.verb-list {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  padding: 12px 0;
+}
+
+.verb-entry.locked {
+  opacity: 0.5;
+}
+
+.verb-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 12px;
+  margin-bottom: 10px;
+}
+
+.verb-name {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.verb-translation {
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.verb-source {
   font-size: 12px;
   color: var(--text-light);
 }

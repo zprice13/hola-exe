@@ -102,6 +102,15 @@ function exampleFor(item: VocabItem, lesson: Lesson): { es: string; en: string }
   return lesson.sentences.find((s) => tokenize(s.es).includes(headword))
 }
 
+/** Verbs whose owning lesson has been completed at least once. */
+export function unlockedVerbs(progress: Progress): string[] {
+  return course
+    .flatMap((u) => u.lessons)
+    .filter((l) => (progress.completedLessons[l.id] ?? 0) > 0)
+    .flatMap((l) => l.conjugates ?? [])
+    .filter((v) => CONJUGATIONS[v])
+}
+
 /** Pronoun→form quiz for a conjugated verb: "he / she drinks" → bebe. */
 function conjugationQuiz(verb: string): Exercise {
   const { forms } = CONJUGATIONS[verb]
@@ -215,6 +224,15 @@ export function buildPracticeSession(progress: Progress, size = 8): Exercise[] {
   }
   for (const sentence of weightedSample(sentences, sentenceWeight, 2)) {
     exercises.push(wordBankExercise(sentence))
+  }
+
+  // Conjugation drills for unlocked verbs, weighted toward the most-missed
+  const verbWeight = (verb: string) => {
+    const stats = progress.wordStats[`conj:${verb}`]
+    return stats ? Math.max(0.5, 1 + stats.missed * 3 - stats.seen * 0.2) : 2
+  }
+  for (const verb of weightedSample(unlockedVerbs(progress), verbWeight, 2)) {
+    exercises.push(conjugationQuiz(verb))
   }
 
   const shuffled = shuffle(exercises)
